@@ -7,14 +7,14 @@ export default function HeroSection() {
             <header className="section_home-header">
                 <div className="home-header_content">
                     <div className="padding-global is-tiny is-hero">
-                        <div className="home-header_headings" style={{ color: "var(--_colors---primary--black, #0f1011)", gap: "2.5%", width: "100%" }}>
-                            <div className="logo-word" style={{ display: "flex", flex: "1 1 35%", maxWidth: "37%", alignItems: "center" }}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 760 210" fill="none" style={{ display: "block", width: "100%", height: "auto" }}>
+                        <div className="home-header_headings text-[#0f1011] gap-[2.5%] w-full">
+                            <div className="logo-word flex flex-[1_1_35%] max-w-[37%] items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 760 210" fill="none" className="block w-full h-auto">
                                     <text x="0" y="175" fontFamily="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" fontWeight="900" fontSize="205" letterSpacing="-1px" textLength="760" lengthAdjust="spacingAndGlyphs" fill="currentColor">UPLIFT</text>
                                 </svg>
                             </div>
-                            <div className="logo-word is-2" style={{ display: "flex", flex: "1 1 62%", maxWidth: "63%", alignItems: "center" }}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 1480 210" fill="none" style={{ display: "block", width: "100%", height: "auto" }}>
+                            <div className="logo-word is-2 flex flex-[1_1_62%] max-w-[63%] items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 1480 210" fill="none" className="block w-full h-auto">
                                     <text x="0" y="175" fontFamily="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" fontWeight="900" fontSize="205" letterSpacing="-2px" textLength="1480" lengthAdjust="spacingAndGlyphs" fill="currentColor">BANGLADESH</text>
                                 </svg>
                             </div>

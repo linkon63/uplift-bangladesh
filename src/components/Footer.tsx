@@ -1,36 +1,58 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function Footer() {
   const [copied, setCopied] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [dhakaTime, setDhakaTime] = useState<{ time: string; period: string }>({
-    time: "11:30",
-    period: "pm",
+  const [clocks, setClocks] = useState<{
+    london: { time: string; period: string; date: string; city: string };
+    newyork: { time: string; period: string; date: string; city: string };
+    dubai: { time: string; period: string; date: string; city: string };
+    dhaka: { time: string; period: string; date: string; city: string };
+  }>({
+    london: { time: "04:50", period: "am", date: "Monday, September 28", city: "UK, London" },
+    newyork: { time: "11:50", period: "pm", date: "Sunday, September 27", city: "USA, New York" },
+    dubai: { time: "07:50", period: "am", date: "Monday, September 28", city: "UAE, Dubai" },
+    dhaka: { time: "09:50", period: "am", date: "Monday, September 28", city: "Bangladesh, Dhaka" },
   });
 
   useEffect(() => {
     const updateTime = () => {
-      try {
-        const parts = new Intl.DateTimeFormat("en-US", {
-          timeZone: "Asia/Dhaka",
-          hour: "numeric",
-          minute: "2-digit",
-          hour12: true,
-        }).formatToParts(new Date());
+      const now = new Date();
+      const formatCity = (timeZone: string, city: string) => {
+        try {
+          const parts = new Intl.DateTimeFormat("en-US", {
+            timeZone,
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          }).formatToParts(now);
 
-        const hour = parts.find((p) => p.type === "hour")?.value || "12";
-        const minute = parts.find((p) => p.type === "minute")?.value || "00";
-        const period = (parts.find((p) => p.type === "dayPeriod")?.value || "PM").toLowerCase();
+          const hour = parts.find((p) => p.type === "hour")?.value || "12";
+          const minute = parts.find((p) => p.type === "minute")?.value || "00";
+          const period = (parts.find((p) => p.type === "dayPeriod")?.value || "am").toLowerCase();
 
-        setDhakaTime({
-          time: `${hour}:${minute}`,
-          period: period,
-        });
-      } catch (err) {
-        // Fallback
-      }
+          const date = new Intl.DateTimeFormat("en-US", {
+            timeZone,
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+          }).format(now);
+
+          return { time: `${hour}:${minute}`, period, date, city };
+        } catch {
+          return { time: "12:00", period: "pm", date: "Monday, September 28", city };
+        }
+      };
+
+      setClocks({
+        london: formatCity("Europe/London", "UK, London"),
+        newyork: formatCity("America/New_York", "USA, New York"),
+        dubai: formatCity("Asia/Dubai", "UAE, Dubai"),
+        dhaka: formatCity("Asia/Dhaka", "Bangladesh, Dhaka"),
+      });
     };
 
     updateTime();
@@ -69,18 +91,7 @@ export default function Footer() {
                         <div className="spacer-small"></div>
                         <div data-wf--contact-form--variant="footer" className="form-block w-form">
                           {formSubmitted ? (
-                            <div
-                              className="w-form-done"
-                              style={{
-                                display: "block",
-                                backgroundColor: "#f0fdf4",
-                                border: "1px solid #bbf7d0",
-                                padding: "24px",
-                                borderRadius: "12px",
-                                color: "#166534",
-                                fontWeight: 500,
-                              }}
-                            >
+                            <div className="w-form-done block bg-green-50 border border-green-200 p-6 rounded-xl text-green-800 font-medium">
                               <div>Thank you! Your message has been received!</div>
                             </div>
                           ) : (
@@ -122,8 +133,8 @@ export default function Footer() {
                                   />
                                 </div>
                               </div>
-                              <div className="message-form_flex" style={{ marginTop: "12px" }}>
-                                <div style={{ width: "100%" }}>
+                              <div className="message-form_flex mt-3">
+                                <div className="w-full">
                                   <label htmlFor="phone" className="contact-form_field-label">
                                     Contact Number
                                   </label>
@@ -136,10 +147,7 @@ export default function Footer() {
                                   />
                                 </div>
                               </div>
-                              <div
-                                className="form-message w-variant-7fe56b33-fb0b-9458-a747-1b9719c8c1fc"
-                                style={{ marginTop: "12px" }}
-                              >
+                              <div className="form-message w-variant-7fe56b33-fb0b-9458-a747-1b9719c8c1fc mt-3">
                                 <label htmlFor="Message" className="contact-form_field-label">
                                   Project / Sponsorship Inquiry
                                 </label>
@@ -154,9 +162,8 @@ export default function Footer() {
                               <div className="spacer-xxsmall"></div>
                               <input
                                 type="submit"
-                                className="button-solid w-button"
+                                className="button-solid w-button cursor-pointer"
                                 value="Send Inquiry"
-                                style={{ cursor: "pointer" }}
                               />
                             </form>
                           )}
@@ -175,9 +182,8 @@ export default function Footer() {
                             <div className="footer-links_columns">
                               <div className="footer_links-list">
                                 <a
-                                  data-wf--footer-link--variant="base"
                                   href="#home"
-                                  className="footer_link w-inline-block"
+                                  className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
                                     <p className="footer_link-text _1">Home</p>
@@ -188,9 +194,8 @@ export default function Footer() {
                                   <div className="footer_link-dot"></div>
                                 </a>
                                 <a
-                                  data-wf--footer-link--variant="base"
                                   href="#works"
-                                  className="footer_link w-inline-block"
+                                  className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
                                     <p className="footer_link-text _1">Works</p>
@@ -201,9 +206,8 @@ export default function Footer() {
                                   <div className="footer_link-dot"></div>
                                 </a>
                                 <a
-                                  data-wf--footer-link--variant="base"
                                   href="#sponsorship"
-                                  className="footer_link w-inline-block"
+                                  className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
                                     <p className="footer_link-text _1">Sponsorship Packages</p>
@@ -225,9 +229,8 @@ export default function Footer() {
                             <div className="footer-links_columns">
                               <div className="footer_links-list">
                                 <a
-                                  data-wf--footer-link--variant="base"
                                   href="#services"
-                                  className="footer_link w-inline-block"
+                                  className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
                                     <p className="footer_link-text _1">Documentary Films</p>
@@ -238,9 +241,8 @@ export default function Footer() {
                                   <div className="footer_link-dot"></div>
                                 </a>
                                 <a
-                                  data-wf--footer-link--variant="base"
                                   href="#services"
-                                  className="footer_link w-inline-block"
+                                  className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
                                     <p className="footer_link-text _1">Corporate Brand Films</p>
@@ -251,9 +253,8 @@ export default function Footer() {
                                   <div className="footer_link-dot"></div>
                                 </a>
                                 <a
-                                  data-wf--footer-link--variant="base"
                                   href="#services"
-                                  className="footer_link w-inline-block"
+                                  className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
                                     <p className="footer_link-text _1">Drone Cinematography</p>
@@ -275,11 +276,10 @@ export default function Footer() {
                             <div className="footer-links_columns">
                               <div className="footer_links-list">
                                 <a
-                                  data-wf--footer-link--variant="base"
                                   href="https://www.youtube.com/@UpliftBangladesh"
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="footer_link w-inline-block"
+                                  className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
                                     <p className="footer_link-text _1">YouTube (451K+)</p>
@@ -290,11 +290,10 @@ export default function Footer() {
                                   <div className="footer_link-dot"></div>
                                 </a>
                                 <a
-                                  data-wf--footer-link--variant="base"
                                   href="https://www.facebook.com/upliftbangladesh"
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="footer_link w-inline-block"
+                                  className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
                                     <p className="footer_link-text _1">Facebook (681K+)</p>
@@ -305,9 +304,8 @@ export default function Footer() {
                                   <div className="footer_link-dot"></div>
                                 </a>
                                 <a
-                                  data-wf--footer-link--variant="base"
                                   href="mailto:upliftbd.media@gmail.com"
-                                  className="footer_link w-inline-block"
+                                  className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
                                     <p className="footer_link-text _1">Email Inquiry</p>
@@ -326,34 +324,17 @@ export default function Footer() {
                             <div className="text-color-grey-400">
                               <div className="text-size-regular">Headquarters:</div>
                             </div>
-                            <div
-                              style={{
-                                fontSize: "14px",
-                                color: "#52525b",
-                                lineHeight: "1.6",
-                                marginTop: "12px",
-                              }}
-                            >
-                              <p
-                                style={{
-                                  margin: "0 0 6px 0",
-                                  color: "#0f1011",
-                                  fontWeight: 600,
-                                }}
-                              >
+                            <div className="text-sm text-zinc-600 leading-relaxed mt-3">
+                              <p className="mb-1.5 text-brand-dark font-semibold">
                                 Uplift Bangladesh
                               </p>
-                              <p style={{ margin: "0 0 4px 0", color: "#4b5563" }}>
+                              <p className="mb-1 text-gray-600">
                                 Bashundhara R/A, Dhaka-1229, Bangladesh
                               </p>
-                              <p style={{ margin: 0 }}>
+                              <p className="m-0">
                                 <a
                                   href="tel:01608427446"
-                                  style={{
-                                    color: "#EE3028",
-                                    textDecoration: "none",
-                                    fontWeight: 600,
-                                  }}
+                                  className="text-brand-red no-underline font-semibold hover:underline"
                                 >
                                   Hotline: 01608-427446
                                 </a>
@@ -363,23 +344,14 @@ export default function Footer() {
                         </div>
 
                         {/* Corporate Email with Clickable mailto and Clipboard Copy Trigger (Requirement 11.1 & 11.2) */}
-                        <div style={{ marginTop: "24px" }}>
+                        <div className="mt-6">
                           <div className="text-color-grey-400">
                             <div className="text-size-regular">Corporate Email:</div>
                           </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "12px",
-                              marginTop: "8px",
-                              flexWrap: "wrap",
-                            }}
-                          >
+                          <div className="email flex items-center gap-3 mt-2 flex-wrap">
                             <a
                               href="mailto:upliftbd.media@gmail.com"
-                              className="footer_link big-2 w-inline-block"
-                              style={{ color: "#0f1011", fontWeight: 700, fontSize: "1.1rem" }}
+                              className="footer_menu-link big-2 w-inline-block text-brand-dark font-bold"
                             >
                               <div className="footer_link-texts big-3">
                                 <p className="footer_link-text _1 big-4">upliftbd.media@gmail.com</p>
@@ -387,6 +359,7 @@ export default function Footer() {
                                   upliftbd.media@gmail.com
                                 </p>
                               </div>
+                              <div className="footer_link-dot big-7"></div>
                             </a>
                             <button
                               type="button"
@@ -423,163 +396,192 @@ export default function Footer() {
                       </div>
                     </div>
 
-                    {/* Timer Cards: Bangladesh, Dhaka Location Card + Audience Metrics (Requirement 11.9) */}
+                    {/* Timer Cards: 4 Live Timezone Cards (UK London, USA New York, UAE Dubai, Bangladesh Dhaka) */}
                     <div className="footer_content-in is-time">
-                      <div className="timer-card" data-time="dhaka">
-                        <div className="relative">
-                          <div className="timer time">{dhakaTime.time}</div>
-                          <div className="time-pm">{dhakaTime.period} BST</div>
+                      {/* Card 1: London */}
+                      <div data-time="london" className="timer-card">
+                        <div className="timer-clock-wrap">
+                          <div className="timer-clock-ghost">88:88</div>
+                          <div className="timer-clock-active time">{clocks.london.time}</div>
+                          <div className="timer-clock-pm time-pm">{clocks.london.period}</div>
                         </div>
                         <div className="timer-divider"></div>
                         <div className="date-time_wr">
                           <div className="date-time">
-                            <p className="text-size-small text-weight-medium" style={{ color: "#0f1011" }}>
-                              Bangladesh, Dhaka
-                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 16 16" fill="none">
+                              <path d="M10 2.666V1.333M10 2.666V4M10 2.666H7M2 6.666V12.666C2 13.403 2.597 14 3.333 14H12.667C13.403 14 14 13.403 14 12.666V6.666H2Z" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M2 6.667V4C2 3.264 2.597 2.667 3.333 2.667H4.667" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M4.668 1.333V4" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M14 6.667V4C14 3.264 13.402 2.667 12.665 2.667H12.332" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="text-size-small text-weight-medium date">{clocks.london.date}</span>
                           </div>
                           <div className="date-time">
-                            <p className="text-size-small" style={{ color: "#059669", fontWeight: 600 }}>
-                              ● Production Active
-                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 16 16" fill="none">
+                              <path d="M13.335 6.666C13.335 9.612 8.001 14.666 8.001 14.666C8.001 14.666 2.668 9.612 2.668 6.666C2.668 3.721 5.056 1.333 8.001 1.333C10.947 1.333 13.335 3.721 13.335 6.666Z" stroke="#707070" strokeWidth="1.4" />
+                              <path d="M8 7.333C8.368 7.333 8.667 7.035 8.667 6.667C8.667 6.298 8.368 6 8 6C7.632 6 7.333 6.298 7.333 6.667C7.333 7.035 7.632 7.333 8 7.333Z" fill="#707070" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="text-size-small text-weight-medium">{clocks.london.city}</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="timer-card">
-                        <div className="relative">
-                          <div className="timer time">451K+</div>
-                          <div className="time-pm">Subs</div>
+                      {/* Card 2: New York */}
+                      <div data-time="newyork" className="timer-card">
+                        <div className="timer-clock-wrap">
+                          <div className="timer-clock-ghost">88:88</div>
+                          <div className="timer-clock-active time">{clocks.newyork.time}</div>
+                          <div className="timer-clock-pm time-pm">{clocks.newyork.period}</div>
                         </div>
                         <div className="timer-divider"></div>
                         <div className="date-time_wr">
                           <div className="date-time">
-                            <p className="text-size-small text-weight-medium" style={{ color: "#0f1011" }}>
-                              YouTube Channel
-                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 16 16" fill="none">
+                              <path d="M10 2.666V1.333M10 2.666V4M10 2.666H7M2 6.666V12.666C2 13.403 2.597 14 3.333 14H12.667C13.403 14 14 13.403 14 12.666V6.666H2Z" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M2 6.667V4C2 3.264 2.597 2.667 3.333 2.667H4.667" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M4.668 1.333V4" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M14 6.667V4C14 3.264 13.402 2.667 12.665 2.667H12.332" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="text-size-small text-weight-medium date">{clocks.newyork.date}</span>
                           </div>
                           <div className="date-time">
-                            <p className="text-size-small" style={{ color: "#71717a" }}>
-                              Long-form documentaries
-                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 16 16" fill="none">
+                              <path d="M13.335 6.666C13.335 9.612 8.001 14.666 8.001 14.666C8.001 14.666 2.668 9.612 2.668 6.666C2.668 3.721 5.056 1.333 8.001 1.333C10.947 1.333 13.335 3.721 13.335 6.666Z" stroke="#707070" strokeWidth="1.4" />
+                              <path d="M8 7.333C8.368 7.333 8.667 7.035 8.667 6.667C8.667 6.298 8.368 6 8 6C7.632 6 7.333 6.298 7.333 6.667C7.333 7.035 7.632 7.333 8 7.333Z" fill="#707070" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="text-size-small text-weight-medium">{clocks.newyork.city}</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="timer-card">
-                        <div className="relative">
-                          <div className="timer time">681K+</div>
-                          <div className="time-pm">Followers</div>
+                      {/* Card 3: Dubai */}
+                      <div data-time="dubai" className="timer-card">
+                        <div className="timer-clock-wrap">
+                          <div className="timer-clock-ghost">88:88</div>
+                          <div className="timer-clock-active time">{clocks.dubai.time}</div>
+                          <div className="timer-clock-pm time-pm">{clocks.dubai.period}</div>
                         </div>
                         <div className="timer-divider"></div>
                         <div className="date-time_wr">
                           <div className="date-time">
-                            <p className="text-size-small text-weight-medium" style={{ color: "#0f1011" }}>
-                              Facebook Community
-                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 16 16" fill="none">
+                              <path d="M10 2.666V1.333M10 2.666V4M10 2.666H7M2 6.666V12.666C2 13.403 2.597 14 3.333 14H12.667C13.403 14 14 13.403 14 12.666V6.666H2Z" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M2 6.667V4C2 3.264 2.597 2.667 3.333 2.667H4.667" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M4.668 1.333V4" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M14 6.667V4C14 3.264 13.402 2.667 12.665 2.667H12.332" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="text-size-small text-weight-medium date">{clocks.dubai.date}</span>
                           </div>
                           <div className="date-time">
-                            <p className="text-size-small" style={{ color: "#71717a" }}>
-                              Viral reels &amp; updates
-                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 16 16" fill="none">
+                              <path d="M13.335 6.666C13.335 9.612 8.001 14.666 8.001 14.666C8.001 14.666 2.668 9.612 2.668 6.666C2.668 3.721 5.056 1.333 8.001 1.333C10.947 1.333 13.335 3.721 13.335 6.666Z" stroke="#707070" strokeWidth="1.4" />
+                              <path d="M8 7.333C8.368 7.333 8.667 7.035 8.667 6.667C8.667 6.298 8.368 6 8 6C7.632 6 7.333 6.298 7.333 6.667C7.333 7.035 7.632 7.333 8 7.333Z" fill="#707070" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="text-size-small text-weight-medium">{clocks.dubai.city}</span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="timer-card">
-                        <div className="relative">
-                          <div className="timer time">1M+</div>
-                          <div className="time-pm">Reach</div>
+                      {/* Card 4: Dhaka */}
+                      <div data-time="dhaka" className="timer-card">
+                        <div className="timer-clock-wrap">
+                          <div className="timer-clock-ghost">88:88</div>
+                          <div className="timer-clock-active time">{clocks.dhaka.time}</div>
+                          <div className="timer-clock-pm time-pm">{clocks.dhaka.period}</div>
                         </div>
                         <div className="timer-divider"></div>
                         <div className="date-time_wr">
                           <div className="date-time">
-                            <p className="text-size-small text-weight-medium" style={{ color: "#0f1011" }}>
-                              Combined Audience
-                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 16 16" fill="none">
+                              <path d="M10 2.666V1.333M10 2.666V4M10 2.666H7M2 6.666V12.666C2 13.403 2.597 14 3.333 14H12.667C13.403 14 14 13.403 14 12.666V6.666H2Z" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M2 6.667V4C2 3.264 2.597 2.667 3.333 2.667H4.667" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M4.668 1.333V4" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M14 6.667V4C14 3.264 13.402 2.667 12.665 2.667H12.332" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="text-size-small text-weight-medium date">{clocks.dhaka.date}</span>
                           </div>
                           <div className="date-time">
-                            <p className="text-size-small" style={{ color: "#71717a" }}>
-                              100% Organic Reach
-                            </p>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 16 16" fill="none">
+                              <path d="M13.335 6.666C13.335 9.612 8.001 14.666 8.001 14.666C8.001 14.666 2.668 9.612 2.668 6.666C2.668 3.721 5.056 1.333 8.001 1.333C10.947 1.333 13.335 3.721 13.335 6.666Z" stroke="#707070" strokeWidth="1.4" />
+                              <path d="M8 7.333C8.368 7.333 8.667 7.035 8.667 6.667C8.667 6.298 8.368 6 8 6C7.632 6 7.333 6.298 7.333 6.667C7.333 7.035 7.632 7.333 8 7.333Z" fill="#707070" stroke="#707070" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="text-size-small text-weight-medium">{clocks.dhaka.city}</span>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {/* Wordmark Typographic Header (Requirement 11.10) */}
-                    <div
-                      style={{
-                        textAlign: "center",
-                        padding: "48px 0 24px 0",
-                        borderBottom: "1px solid rgba(0, 0, 0, 0.08)",
-                        marginBottom: "24px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: "clamp(22px, 6.5vw, 92px)",
-                          fontWeight: 900,
-                          letterSpacing: "0.04em",
-                          textTransform: "uppercase",
-                          color: "#18181b",
-                          background: "linear-gradient(180deg, #18181b 30%, #52525b 100%)",
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                          lineHeight: 1.1,
-                          wordBreak: "break-word",
-                          overflowWrap: "break-word",
-                        }}
-                      >
-                        UPLIFT BANGLADESH
+                    {/* Tagline: Rise • Focus • Dominate • Documenting Progress. Building Trust. Inspiring a Nation. */}
+                    <div className="footer_motto-wrap">
+                      <div className="footer_motto-inner">
+                        <span className="footer_motto-highlight">Rise • Focus • Dominate</span>
+                        <span className="footer_motto-dot">•</span>
+                        <span className="footer_motto-text">Documenting Progress. Building Trust. Inspiring a Nation.</span>
                       </div>
-                      <div
-                        style={{
-                          fontSize: "clamp(11px, 2.8vw, 14px)",
-                          letterSpacing: "0.12em",
-                          textTransform: "uppercase",
-                          color: "#EE3028",
-                          marginTop: "12px",
-                          fontWeight: 600,
-                          lineHeight: 1.5,
-                          wordBreak: "break-word",
-                        }}
+                    </div>
+
+                    {/* Colossal Edge-to-Edge Wordmark (matching reference image COSMOS STUDIO style) */}
+                    <div className="footer_wordmark-wrap">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 1440 240"
+                        width="100%"
+                        preserveAspectRatio="xMidYMid meet"
+                        className="footer_wordmark-svg"
+                        role="img"
+                        aria-label="UPLIFT BANGLADESH"
                       >
-                        Rise • Focus • Dominate • Documenting Progress. Building Trust. Inspiring a Nation.
-                      </div>
+                        <text
+                          x="50%"
+                          y="200"
+                          textAnchor="middle"
+                          textLength="1440"
+                          lengthAdjust="spacingAndGlyphs"
+                          fill="#0f1011"
+                          className="font-display font-black uppercase tracking-[0.01em] [font-size:235px]"
+                        >
+                          UPLIFT BANGLADESH
+                        </text>
+                      </svg>
                     </div>
                   </div>
 
-                  {/* Legal and Copyright Area (Requirement 11.8) */}
+                  {/* Legal and Copyright Area with Scroll-To-Top (Matches Reference Image) */}
                   <div className="footer_legal-wrap">
-                    <div className="footer_copyright" style={{ color: "#71717a" }}>
-                      © 2025 Uplift Bangladesh™. All rights reserved.
+                    <div className="footer_copyright">
+                      © 2026 Uplift Bangladesh™
                     </div>
-                    <div className="w-dyn-list">
-                      <div role="list" className="legal-wr w-dyn-items">
-                        <div role="listitem" className="w-dyn-item">
-                          <span className="footer_copyright" style={{ color: "#71717a" }}>
-                            Bashundhara R/A, Dhaka-1229, Bangladesh
-                          </span>
-                        </div>
-                        <div role="listitem" className="w-dyn-item">
-                          <a
-                            href="tel:01608427446"
-                            className="footer_copyright link"
-                            style={{ color: "#52525b" }}
-                          >
-                            Hotline: 01608-427446
-                          </a>
-                        </div>
-                        <div role="listitem" className="w-dyn-item">
-                          <a
-                            href="mailto:upliftbd.media@gmail.com"
-                            className="footer_copyright link"
-                            style={{ color: "#52525b" }}
-                          >
-                            upliftbd.media@gmail.com
-                          </a>
-                        </div>
-                      </div>
+                    <div className="footer_legal-right">
+                      <Link href="/legal/privacy-policy" className="footer_legal-link">
+                        Privacy Policy
+                      </Link>
+                      <Link href="/legal/terms-of-use" className="footer_legal-link">
+                        Terms of use
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (typeof window !== "undefined") {
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                          }
+                        }}
+                        aria-label="Scroll to top"
+                        className="footer_scroll-top-btn"
+                        title="Scroll to top"
+                      >
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M12 19V5M5 12l7-7 7 7" />
+                        </svg>
+                      </button>
                     </div>
                   </div>
                 </div>

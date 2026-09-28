@@ -1,289 +1,715 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function Navbar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileFocusOpen, setMobileFocusOpen] = useState(false);
+  const [desktopServicesOpen, setDesktopServicesOpen] = useState(false);
+  const [desktopFocusOpen, setDesktopFocusOpen] = useState(false);
+
+  // Lock body scroll when mobile drawer is open & support Escape key
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      if (typeof document !== "undefined") {
+        document.body.style.overflow = "";
+      }
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
-<a href="#main" className="skip-link">Skip to content</a>
-    <nav aria-label="Main" data-wf--navbar--menu-state="menu-closed-default" className="navbar">
-        <div className="navbar_content">
-            <div animation="navbar-content" className="padding-global is-tiny">
-                <div className="navbar_component">
-                    <a aria-label="Uplift Bangladesh — home" href="/" aria-current="page"
-                        className="navbar-logo_wr w-inline-block w--current">
-                        <div className="menu_logo-wr"><img
-                                src="/assets/img/logo/logo.png"
-                                loading="lazy" alt="Uplift Bangladesh" className="menu_logo" style={{ objectFit: "contain", maxHeight: "36px", width: "auto" }} /></div>
-                        <div className="navbar_logo-wrap">
-                            <div className="logo-text-flex">
-                                <div className="navbar_logo-anim">
-                                    <div aria-hidden="true" className="navbar_logo-anim_text">Documentary Filmmaker</div>
-                                    <div aria-hidden="true" className="navbar_logo-anim_text is-abs">Development Content Creator</div>
-                                    <div aria-hidden="true" className="navbar_logo-anim_text is-abs">Mega-Projects Influencer</div>
-                                    <div aria-hidden="true" className="navbar_logo-anim_text is-abs">Bangladesh&#x27;s #1 Brand</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    <div className="navbar_links">
-                        <div className="navbar_links-wrap">
-                            <div data-hover="true" data-delay="0" className="w-dropdown">
-                                <div className="dd-toggle w-dropdown-toggle">
-                                    <div className="navbar_link">
-                                        <div className="navbar_link-texts">
-                                            <div className="navbar_link-text _1">Services</div>
-                                            <div aria-hidden="true" className="navbar_link-text _2">Services</div>
-                                        </div>
-                                    </div><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 12 7"
-                                        fill="none" className="dd-icon">
-                                        <path
-                                            d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
-                                            stroke="currentColor" strokeWidth="2" strokeLinecap="round"></path>
-                                    </svg>
-                                </div>
-                                <nav className="dropdown-list w-dropdown-list">
-                                    <div className="w-dyn-list">
-                                        <div role="list" className="w-dyn-items">
-                                            <div role="listitem" className="w-dyn-item"><a
-                                                    href="#services" className="dropdown-link">Drone Cinematography</a></div>
-                                            <div role="listitem" className="w-dyn-item"><a href="#services"
-                                                    className="dropdown-link">Corporate Brand Films (OVC)</a></div>
-                                            <div role="listitem" className="w-dyn-item"><a href="#services"
-                                                    className="dropdown-link">Factory & Industrial Videos</a></div>
-                                            <div role="listitem" className="w-dyn-item"><a href="#services"
-                                                    className="dropdown-link">Hotel & Resort Films</a></div>
-                                            <div role="listitem" className="w-dyn-item"><a href="#services"
-                                                    className="dropdown-link">Real Estate Productions</a></div>
-                                        </div>
-                                    </div>
-                                </nav>
-                            </div>
-                            <div data-hover="true" data-delay="0" className="w-dropdown">
-                                <div className="dd-toggle w-dropdown-toggle">
-                                    <div className="navbar_link">
-                                        <div className="navbar_link-texts">
-                                            <div className="navbar_link-text _1">Focus Areas</div>
-                                            <div aria-hidden="true" className="navbar_link-text _2">Focus Areas</div>
-                                        </div>
-                                    </div><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 12 7"
-                                        fill="none" className="dd-icon">
-                                        <path
-                                            d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
-                                            stroke="currentColor" strokeWidth="2" strokeLinecap="round"></path>
-                                    </svg>
-                                </div>
-                                <nav className="dropdown-list w-dropdown-list">
-                                    <div className="w-dyn-list">
-                                        <div role="list" className="w-dyn-items">
-                                            <div role="listitem" className="w-dyn-item"><a href="#services"
-                                                    className="dropdown-link">Mega Infrastructure</a></div>
-                                            <div role="listitem" className="w-dyn-item"><a
-                                                    href="#services" className="dropdown-link">Smart Cities & Urban</a></div>
-                                            <div role="listitem" className="w-dyn-item"><a
-                                                    href="#services" className="dropdown-link">Industrial & Economic Zones</a></div>
-                                            <div role="listitem" className="w-dyn-item"><a
-                                                    href="#services" className="dropdown-link">Green Energy & Sustainability</a></div>
-                                        </div>
-                                    </div>
-                                </nav>
-                            </div>
-                            <a href="#works" className="navbar_link w-inline-block">
-                                <div className="navbar_link-texts">
-                                    <div className="navbar_link-text _1">Mega-Projects</div>
-                                    <div aria-hidden="true" className="navbar_link-text _2">Mega-Projects</div>
-                                </div>
-                                <div className="nav_link-dot"></div>
-                            </a>
-                            <a href="#sponsorship" className="navbar_link w-inline-block">
-                                <div className="navbar_link-texts">
-                                    <div className="navbar_link-text _1">Sponsorship</div>
-                                    <div aria-hidden="true" className="navbar_link-text _2">Sponsorship</div>
-                                </div>
-                                <div className="nav_link-dot"></div>
-                            </a>
-                        </div>
-                    </div>
-                    <div className="navbar_contact">
-                        <div className="navbar-contact">
-                            <div data-wf--talk-to--variant="base"><a
-                                    href="tel:01608427446"
-                                    className="navbar_talk-to w-inline-block"><img loading="lazy"
-                                        src="/assets/img/logo/logo.png"
-                                        alt="Uplift Bangladesh" className="navbar_contact-pic" style={{ objectFit: "contain" }} />
-                                    <div className="navbar_contact-texts">
-                                        <div className="relative">
-                                            <div className="nav_contact-name">Uplift Bangladesh</div>
-                                            <div className="online"></div>
-                                        </div>
-                                        <div className="home-header_position">01608-427446</div>
-                                    </div>
-                                </a></div>
-                        </div><button fs-scrolldisable-element="toggle" fs-scrolldisable-media="(max-width: 767px)"
-                            aria-controls="mobile-menu" aria-label="Open menu" aria-expanded="false"
-                            className="navbar_menu-open"><svg xmlns="http://www.w3.org/2000/svg" width="100%"
-                                viewBox="0 0 24 24" fill="none" aria-hidden="true" className="menu-icon">
-                                <path d="M3 5H21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-                                    strokeLinejoin="round"></path>
-                                <path d="M3 12H21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-                                    strokeLinejoin="round"></path>
-                                <path d="M3 19H21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-                                    strokeLinejoin="round"></path>
-                            </svg></button>
-                        <div>
-                            <a data-wf--button--variant="small-light"
-                                href="#contact"
-                                className="button w-inline-block">
-                                <div className="button-in">
-                                    <div className="button_texts">
-                                        <div className="button_text _1">Partner With Us</div>
-                                        <div aria-hidden="true" className="button_text _2">Get In Touch</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="mobile-menu" className="menu">
-            <div className="menu_content">
-                <div className="menu_items">
-                    <div className="menu_links"><a href="/" aria-current="page"
-                            className="menu_logo-wrap w-inline-block w--current"><img loading="lazy"
-                                src="/assets/img/logo/logo.png"
-                                alt="Uplift Bangladesh" className="menu_logo" style={{ objectFit: "contain", maxHeight: "40px" }} /></a>
-                        <div className="menu_col-1">
-                            <div className="menu_links-wrap">
-                                <div data-hover="false" data-delay="0" className="dropdown-menu w-dropdown">
-                                    <div className="dd-toggle w-dropdown-toggle">
-                                        <div className="navbar_link">
-                                            <div className="navbar_link-texts">
-                                                <div className="navbar_link-text is--dd">Services</div>
-                                            </div>
-                                        </div><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 12 7"
-                                            fill="none" className="dd-icon">
-                                            <path
-                                                d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
-                                                stroke="currentColor" strokeWidth="2" strokeLinecap="round"></path>
-                                        </svg>
-                                    </div>
-                                    <nav className="dropdown-list w-dropdown-list">
-                                        <div className="w-dyn-list">
-                                            <div role="list" className="w-dyn-items">
-                                                <div role="listitem" className="w-dyn-item"><a
-                                                        href="#services" className="dropdown-link">Drone Cinematography</a></div>
-                                                <div role="listitem" className="w-dyn-item"><a
-                                                        href="#services"
-                                                        className="dropdown-link">Corporate Brand Films</a></div>
-                                                <div role="listitem" className="w-dyn-item"><a
-                                                        href="#services"
-                                                        className="dropdown-link">Factory & Industrial OVC</a></div>
-                                                <div role="listitem" className="w-dyn-item"><a
-                                                        href="#services"
-                                                        className="dropdown-link">Real Estate & Hospitality</a></div>
-                                            </div>
-                                        </div>
-                                    </nav>
-                                </div>
-                                <div data-hover="false" data-delay="0" className="dropdown-menu w-dropdown">
-                                    <div className="dd-toggle w-dropdown-toggle">
-                                        <div className="navbar_link">
-                                            <div className="navbar_link-texts">
-                                                <div className="navbar_link-text is--dd">Focus Areas</div>
-                                            </div>
-                                        </div><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 12 7"
-                                            fill="none" className="dd-icon">
-                                            <path
-                                                d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
-                                                stroke="currentColor" strokeWidth="2" strokeLinecap="round"></path>
-                                        </svg>
-                                    </div>
-                                    <nav className="dropdown-list w-dropdown-list">
-                                        <div className="w-dyn-list">
-                                            <div role="list" className="w-dyn-items">
-                                                <div role="listitem" className="w-dyn-item"><a
-                                                        href="#services"
-                                                        className="dropdown-link">Mega Infrastructure</a></div>
-                                                <div role="listitem" className="w-dyn-item"><a
-                                                        href="#services" className="dropdown-link">Smart Cities & Urban</a></div>
-                                                <div role="listitem" className="w-dyn-item"><a
-                                                        href="#services" className="dropdown-link">Economic Zones</a></div>
-                                            </div>
-                                        </div>
-                                    </nav>
-                                </div>
-                                <a href="#works" className="menu_link w-inline-block">
-                                    <div className="menu_link-texts">
-                                        <p className="menu_link-text _1">Mega-Projects</p>
-                                        <p aria-hidden="true" className="menu_link-text _2">Mega-Projects</p>
-                                    </div>
-                                    <div className="menu_link-dot"></div>
-                                </a>
-                                <a href="#sponsorship" className="menu_link w-inline-block">
-                                    <div className="menu_link-texts">
-                                        <p className="menu_link-text _1">Sponsorship</p>
-                                        <p aria-hidden="true" className="menu_link-text _2">Sponsorship</p>
-                                    </div>
-                                    <div className="menu_link-dot"></div>
-                                </a>
-                            </div>
-                            <div data-wf--talk-to--variant="base">
-                                <div className="navbar_talk-to_wr">
-                                    <div className="navbar_talk-to"><img loading="lazy"
-                                            src="/assets/img/logo/logo.png"
-                                            alt="Uplift Bangladesh" className="navbar_contact-pic" style={{ objectFit: "contain" }} />
-                                        <div className="navbar_contact-texts">
-                                            <div className="relative">
-                                                <div className="nav_contact-name">Uplift Bangladesh</div>
-                                                <div className="online"></div>
-                                            </div>
-                                            <div className="home-header_position">01608-427446</div>
-                                        </div>
-                                    </div>
-                                    <a data-wf--button--variant="small-light"
-                                        href="#contact"
-                                        className="button w-inline-block">
-                                        <div className="button-in">
-                                            <div className="button_texts">
-                                                <div className="button_text _1">Partner With Us</div>
-                                                <div aria-hidden="true" className="button_text _2">Get In Touch</div>
-                                            </div>
-                                            <div className="button_glow-wrap">
-                                                <div className="button_glow"></div>
-                                            </div>
-                                        </div>
-                                        <div className="button_border-wrap">
-                                            <div className="button_border"></div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="menu_legal">
-                                <div className="menu_legal-links"><a href="https://www.youtube.com/@UpliftBangladesh"
-                                        target="_blank" className="menu_legal-link">YouTube (451K+)</a><a
-                                        href="https://www.facebook.com/upliftbangladesh" target="_blank"
-                                        className="menu_legal-link">Facebook (681K+)</a><a
-                                        href="https://www.instagram.com" target="_blank"
-                                        className="menu_legal-link">Instagram</a><a
-                                        href="https://www.tiktok.com" target="_blank"
-                                        className="menu_legal-link">TikTok</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div><button aria-label="Close Menu" className="menu_close"><svg xmlns="http://www.w3.org/2000/svg"
-                        width="100%" viewBox="0 0 56 56" fill="none" className="close">
-                        <rect width="56" height="56" rx="28" fill="#F5F5F5"></rect>
-                        <path
-                            d="M23.6328 32.3688L28.0017 28M28.0017 28L32.3705 23.6311M28.0017 28L23.6328 23.6311M28.0017 28L32.3705 32.3688"
-                            stroke="#0F1011" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path>
-                    </svg></button>
-            </div>
-        </div>
-        <div className="menu_bg"></div>
-        <div className="hidden w-embed">
-            
-        </div>
-    </nav>
+      <a href="#main" className="skip-link">
+        Skip to content
+      </a>
 
+      <nav
+        aria-label="Main"
+        data-wf--navbar--menu-state={mobileMenuOpen ? "menu-open" : "menu-closed-default"}
+        className="navbar"
+      >
+        <div className="navbar_content">
+          <div animation="navbar-content" className="padding-global is-tiny">
+            <div className="navbar_component">
+              {/* Brand Logo & Animated Roles */}
+              <Link
+                aria-label="Uplift Bangladesh — home"
+                href="/"
+                aria-current="page"
+                className="navbar-logo_wr w-inline-block w--current"
+              >
+                <div className="menu_logo-wr">
+                  <img
+                    src="/assets/img/logo/logo.png"
+                    loading="lazy"
+                    alt="Uplift Bangladesh"
+                    className="menu_logo object-contain max-h-[36px] w-auto"
+                  />
+                </div>
+                <div className="navbar_logo-wrap">
+                  <div className="logo-text-flex">
+                    <div className="navbar_logo-anim">
+                      <div aria-hidden="true" className="navbar_logo-anim_text">
+                        Documentary Filmmaker
+                      </div>
+                      <div aria-hidden="true" className="navbar_logo-anim_text is-abs">
+                        Development Content Creator
+                      </div>
+                      <div aria-hidden="true" className="navbar_logo-anim_text is-abs">
+                        Mega-Projects Influencer
+                      </div>
+                      <div aria-hidden="true" className="navbar_logo-anim_text is-abs">
+                        Bangladesh&#x27;s #1 Brand
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+
+              {/* Desktop Nav Links */}
+              <div className="navbar_links">
+                <div className="navbar_links-wrap">
+                  {/* Desktop Services Dropdown */}
+                  <div
+                    className={`w-dropdown ${desktopServicesOpen ? "w--open" : ""}`}
+                    onMouseEnter={() => setDesktopServicesOpen(true)}
+                    onMouseLeave={() => setDesktopServicesOpen(false)}
+                  >
+                    <div
+                      className="dd-toggle w-dropdown-toggle"
+                      onClick={() => setDesktopServicesOpen(!desktopServicesOpen)}
+                      role="button"
+                      aria-haspopup="menu"
+                      aria-expanded={desktopServicesOpen}
+                    >
+                      <div className="navbar_menu-link">
+                        <div className="navbar_link-texts">
+                          <div className="navbar_link-text _1">Services</div>
+                          <div aria-hidden="true" className="navbar_link-text _2">
+                            Services
+                          </div>
+                        </div>
+                      </div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="100%"
+                        viewBox="0 0 12 7"
+                        fill="none"
+                        className={`dd-icon transition-transform duration-200 ${
+                          desktopServicesOpen ? "rotate-180" : "rotate-0"
+                        }`}
+                      >
+                        <path
+                          d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
+                    <nav
+                      className={`dropdown-list w-dropdown-list transition-all duration-200 ${
+                        desktopServicesOpen
+                          ? "w--open block opacity-100 pointer-events-auto -translate-x-1/2 translate-y-0"
+                          : ""
+                      }`}
+                    >
+                      <div className="w-dyn-list">
+                        <div role="list" className="w-dyn-items">
+                          <div role="listitem" className="w-dyn-item">
+                            <a
+                              href="#services"
+                              onClick={() => setDesktopServicesOpen(false)}
+                              className="dropdown-link"
+                            >
+                              Drone Cinematography
+                            </a>
+                          </div>
+                          <div role="listitem" className="w-dyn-item">
+                            <a
+                              href="#services"
+                              onClick={() => setDesktopServicesOpen(false)}
+                              className="dropdown-link"
+                            >
+                              Corporate Brand Films (OVC)
+                            </a>
+                          </div>
+                          <div role="listitem" className="w-dyn-item">
+                            <a
+                              href="#services"
+                              onClick={() => setDesktopServicesOpen(false)}
+                              className="dropdown-link"
+                            >
+                              Factory &amp; Industrial Videos
+                            </a>
+                          </div>
+                          <div role="listitem" className="w-dyn-item">
+                            <a
+                              href="#services"
+                              onClick={() => setDesktopServicesOpen(false)}
+                              className="dropdown-link"
+                            >
+                              Hotel &amp; Resort Films
+                            </a>
+                          </div>
+                          <div role="listitem" className="w-dyn-item">
+                            <a
+                              href="#services"
+                              onClick={() => setDesktopServicesOpen(false)}
+                              className="dropdown-link"
+                            >
+                              Real Estate Productions
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </nav>
+                  </div>
+
+                  {/* Desktop Focus Areas Dropdown */}
+                  <div
+                    className={`w-dropdown ${desktopFocusOpen ? "w--open" : ""}`}
+                    onMouseEnter={() => setDesktopFocusOpen(true)}
+                    onMouseLeave={() => setDesktopFocusOpen(false)}
+                  >
+                    <div
+                      className="dd-toggle w-dropdown-toggle"
+                      onClick={() => setDesktopFocusOpen(!desktopFocusOpen)}
+                      role="button"
+                      aria-haspopup="menu"
+                      aria-expanded={desktopFocusOpen}
+                    >
+                      <div className="navbar_menu-link">
+                        <div className="navbar_link-texts">
+                          <div className="navbar_link-text _1">Focus Areas</div>
+                          <div aria-hidden="true" className="navbar_link-text _2">
+                            Focus Areas
+                          </div>
+                        </div>
+                      </div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="100%"
+                        viewBox="0 0 12 7"
+                        fill="none"
+                        className={`dd-icon transition-transform duration-200 ${
+                          desktopFocusOpen ? "rotate-180" : "rotate-0"
+                        }`}
+                      >
+                        <path
+                          d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
+                    <nav
+                      className={`dropdown-list w-dropdown-list transition-all duration-200 ${
+                        desktopFocusOpen
+                          ? "w--open block opacity-100 pointer-events-auto -translate-x-1/2 translate-y-0"
+                          : ""
+                      }`}
+                    >
+                      <div className="w-dyn-list">
+                        <div role="list" className="w-dyn-items">
+                          <div role="listitem" className="w-dyn-item">
+                            <a
+                              href="#services"
+                              onClick={() => setDesktopFocusOpen(false)}
+                              className="dropdown-link"
+                            >
+                              Mega Infrastructure
+                            </a>
+                          </div>
+                          <div role="listitem" className="w-dyn-item">
+                            <a
+                              href="#services"
+                              onClick={() => setDesktopFocusOpen(false)}
+                              className="dropdown-link"
+                            >
+                              Smart Cities &amp; Urban
+                            </a>
+                          </div>
+                          <div role="listitem" className="w-dyn-item">
+                            <a
+                              href="#services"
+                              onClick={() => setDesktopFocusOpen(false)}
+                              className="dropdown-link"
+                            >
+                              Industrial &amp; Economic Zones
+                            </a>
+                          </div>
+                          <div role="listitem" className="w-dyn-item">
+                            <a
+                              href="#services"
+                              onClick={() => setDesktopFocusOpen(false)}
+                              className="dropdown-link"
+                            >
+                              Green Energy &amp; Sustainability
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </nav>
+                  </div>
+
+                  <a href="#works" className="navbar_menu-link w-inline-block">
+                    <div className="navbar_link-texts">
+                      <div className="navbar_link-text _1">Mega-Projects</div>
+                      <div aria-hidden="true" className="navbar_link-text _2">
+                        Mega-Projects
+                      </div>
+                    </div>
+                    <div className="nav_link-dot"></div>
+                  </a>
+
+                  <a href="#sponsorship" className="navbar_menu-link w-inline-block">
+                    <div className="navbar_link-texts">
+                      <div className="navbar_link-text _1">Sponsorship</div>
+                      <div aria-hidden="true" className="navbar_link-text _2">
+                        Sponsorship
+                      </div>
+                    </div>
+                    <div className="nav_link-dot"></div>
+                  </a>
+                </div>
+              </div>
+
+              {/* Navbar Right: Phone contact, Mobile Menu Toggle Button, Partner CTA */}
+              <div className="navbar_contact">
+                <div className="navbar-contact">
+                  <div data-wf--talk-to--variant="base">
+                    <a href="tel:01608427446" className="navbar_talk-to w-inline-block">
+                      <img
+                        loading="lazy"
+                        src="/assets/img/logo/logo.png"
+                        alt="Uplift Bangladesh"
+                        className="navbar_contact-pic object-contain"
+                      />
+                      <div className="navbar_contact-texts">
+                        <div className="relative">
+                          <div className="nav_contact-name">Uplift Bangladesh</div>
+                          <div className="online"></div>
+                        </div>
+                        <div className="home-header_position">01608-427446</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Mobile Hamburger / Cross Toggle Button */}
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  aria-controls="mobile-menu"
+                  aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                  aria-expanded={mobileMenuOpen}
+                  className={`navbar_menu-open ${mobileMenuOpen ? "open" : ""}`}
+                >
+                  {mobileMenuOpen ? (
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#0f1011"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="100%"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden="true"
+                      className="menu-icon"
+                    >
+                      <path
+                        d="M3 5H21"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>
+                      <path
+                        d="M3 12H21"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>
+                      <path
+                        d="M3 19H21"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      ></path>
+                    </svg>
+                  )}
+                </button>
+
+                {/* Desktop Partner CTA */}
+                <div>
+                  <a
+                    data-wf--button--variant="small-light"
+                    href="#contact"
+                    className="button w-inline-block"
+                  >
+                    <div className="button-in">
+                      <div className="button_texts">
+                        <div className="button_text _1">Partner With Us</div>
+                        <div aria-hidden="true" className="button_text _2">
+                          Get In Touch
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Backdrop Overlay (Clicking dark area outside drawer closes it) */}
+        <div
+          className={`menu_bg ${mobileMenuOpen ? "is-open" : ""}`}
+          onClick={closeMobileMenu}
+          aria-hidden="true"
+        />
+
+        {/* Mobile Navigation Drawer Modal */}
+        <div
+          id="mobile-menu"
+          className={`menu ${mobileMenuOpen ? "is-open" : ""}`}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile Navigation"
+          onClick={(e) => {
+            // Close if clicking the backdrop area outside the card
+            if (e.target === e.currentTarget) {
+              closeMobileMenu();
+            }
+          }}
+        >
+          <div className="menu_content" onClick={(e) => e.stopPropagation()}>
+            {/* Drawer Header: Brand Logo on Left, High-Contrast Cross Close Button on Right */}
+            <div className="menu_drawer-header">
+              <Link
+                href="/"
+                aria-current="page"
+                onClick={closeMobileMenu}
+                className="menu_logo-wrap w-inline-block w--current"
+              >
+                <img
+                  loading="lazy"
+                  src="/assets/img/logo/logo.png"
+                  alt="Uplift Bangladesh"
+                  className="menu_logo object-contain max-h-[38px] w-auto"
+                />
+              </Link>
+
+              {/* Dedicated Cross (X) Close Button */}
+              <button
+                type="button"
+                onClick={closeMobileMenu}
+                aria-label="Close navigation menu"
+                className="menu_close"
+                title="Close menu"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+
+            {/* Drawer Body Items */}
+            <div className="menu_items">
+              <div className="menu_links">
+                <div className="menu_col-1">
+                  <div className="menu_links-wrap">
+                    {/* Mobile Services Accordion Dropdown */}
+                    <div
+                      className={`dropdown-menu ${
+                        mobileServicesOpen ? "is-open w--open" : ""
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                        className="dd-toggle"
+                        aria-expanded={mobileServicesOpen}
+                        aria-label="Toggle Services submenu"
+                      >
+                        <span className="navbar_link-text is--dd">Services</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 12 7"
+                          fill="none"
+                          className={`dd-icon transition-transform duration-200 ${
+                            mobileServicesOpen ? "rotate-180 text-[#EE3028]" : "rotate-0 text-zinc-500"
+                          }`}
+                        >
+                          <path
+                            d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </button>
+
+                      {/* Expanded Submenu List */}
+                      <div
+                        className={`dropdown-list ${
+                          mobileServicesOpen ? "is-open w--open" : ""
+                        }`}
+                      >
+                        <a
+                          href="#services"
+                          onClick={closeMobileMenu}
+                          className="dropdown-link"
+                        >
+                          Drone Cinematography
+                        </a>
+                        <a
+                          href="#services"
+                          onClick={closeMobileMenu}
+                          className="dropdown-link"
+                        >
+                          Corporate Brand Films (OVC)
+                        </a>
+                        <a
+                          href="#services"
+                          onClick={closeMobileMenu}
+                          className="dropdown-link"
+                        >
+                          Factory &amp; Industrial Videos
+                        </a>
+                        <a
+                          href="#services"
+                          onClick={closeMobileMenu}
+                          className="dropdown-link"
+                        >
+                          Hotel &amp; Resort Films
+                        </a>
+                        <a
+                          href="#services"
+                          onClick={closeMobileMenu}
+                          className="dropdown-link"
+                        >
+                          Real Estate Productions
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Mobile Focus Areas Accordion Dropdown */}
+                    <div
+                      className={`dropdown-menu ${
+                        mobileFocusOpen ? "is-open w--open" : ""
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setMobileFocusOpen(!mobileFocusOpen)}
+                        className="dd-toggle"
+                        aria-expanded={mobileFocusOpen}
+                        aria-label="Toggle Focus Areas submenu"
+                      >
+                        <span className="navbar_link-text is--dd">Focus Areas</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 12 7"
+                          fill="none"
+                          className={`dd-icon transition-transform duration-200 ${
+                            mobileFocusOpen ? "rotate-180 text-[#EE3028]" : "rotate-0 text-zinc-500"
+                          }`}
+                        >
+                          <path
+                            d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </button>
+
+                      {/* Expanded Submenu List */}
+                      <div
+                        className={`dropdown-list ${
+                          mobileFocusOpen ? "is-open w--open" : ""
+                        }`}
+                      >
+                        <a
+                          href="#services"
+                          onClick={closeMobileMenu}
+                          className="dropdown-link"
+                        >
+                          Mega Infrastructure
+                        </a>
+                        <a
+                          href="#services"
+                          onClick={closeMobileMenu}
+                          className="dropdown-link"
+                        >
+                          Smart Cities &amp; Urban
+                        </a>
+                        <a
+                          href="#services"
+                          onClick={closeMobileMenu}
+                          className="dropdown-link"
+                        >
+                          Industrial &amp; Economic Zones
+                        </a>
+                        <a
+                          href="#services"
+                          onClick={closeMobileMenu}
+                          className="dropdown-link"
+                        >
+                          Green Energy &amp; Sustainability
+                        </a>
+                      </div>
+                    </div>
+
+                    {/* Direct Navigation Links */}
+                    <a
+                      href="#works"
+                      onClick={closeMobileMenu}
+                      className="menu_menu-link w-inline-block"
+                    >
+                      <span className="menu_link-text">Mega-Projects</span>
+                    </a>
+
+                    <a
+                      href="#sponsorship"
+                      onClick={closeMobileMenu}
+                      className="menu_menu-link w-inline-block"
+                    >
+                      <span className="menu_link-text">Sponsorship</span>
+                    </a>
+                  </div>
+
+                  {/* Mobile Contact & Direct Action in Drawer */}
+                  <div data-wf--talk-to--variant="base">
+                    <div className="navbar_talk-to_wr">
+                      <a
+                        href="tel:01608427446"
+                        className="navbar_talk-to no-underline"
+                      >
+                        <img
+                          loading="lazy"
+                          src="/assets/img/logo/logo.png"
+                          alt="Uplift Bangladesh"
+                          className="navbar_contact-pic object-contain"
+                        />
+                        <div className="navbar_contact-texts">
+                          <div className="relative">
+                            <div className="nav_contact-name">Uplift Bangladesh</div>
+                            <div className="online"></div>
+                          </div>
+                          <div className="home-header_position">01608-427446</div>
+                        </div>
+                      </a>
+
+                      <a
+                        data-wf--button--variant="small-light"
+                        href="#contact"
+                        onClick={closeMobileMenu}
+                        className="button w-inline-block w-full"
+                      >
+                        <div className="button-in justify-center">
+                          <div className="button_texts">
+                            <div className="button_text _1">Partner With Us</div>
+                            <div aria-hidden="true" className="button_text _2">
+                              Get In Touch
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Social and Community Links */}
+                  <div className="menu_legal">
+                    <div className="menu_legal-links">
+                      <a
+                        href="https://www.youtube.com/@UpliftBangladesh"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="menu_legal-link"
+                      >
+                        YouTube (451K+)
+                      </a>
+                      <a
+                        href="https://www.facebook.com/upliftbangladesh"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="menu_legal-link"
+                      >
+                        Facebook (681K+)
+                      </a>
+                      <a
+                        href="https://www.instagram.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="menu_legal-link"
+                      >
+                        Instagram
+                      </a>
+                      <a
+                        href="https://www.tiktok.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="menu_legal-link"
+                      >
+                        TikTok
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
     </>
   );
 }

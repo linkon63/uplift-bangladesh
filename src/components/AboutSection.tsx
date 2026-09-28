@@ -14,15 +14,15 @@ export default function AboutSection() {
                     <div className="text-style-label-caption">About us</div>
                   </div>
                   <div className="spacer-small"></div>
-                  <h2 className="heading-style-h3 is-mobile-h4" style={{ color: "#0f1011" }}>
+                  <h2 className="heading-style-h3 is-mobile-h4 text-[#0f1011]">
                     A trusted documentary team documenting Bangladesh&#x27;s progress and inspiring a nation
                   </h2>
                   <div className="spacer-custom-2"></div>
-                  <p className="about_paragraph" style={{ color: "#0f1011" }}>
+                  <p className="about_paragraph text-[#0f1011]">
                     We&#x27;re not a generic content creator. We&#x27;re an embedded documentary team — the longer you partner with us, the deeper our storytelling impact becomes. We focus on the projects that define Bangladesh&#x27;s future.
                   </p>
                   <div className="spacer-custom-2"></div>
-                  <p className="about_paragraph text-color-grey-400" style={{ color: "#52525b" }}>
+                  <p className="about_paragraph text-zinc-600">
                     We bring Bangladesh&#x27;s most ambitious infrastructure, engineering, industrial, transportation, aviation, energy, and smart development projects to life—capturing the vision, innovation, and progress shaping the country&#x27;s future. More than a media platform, UPLIFT BANGLADESH is a movement committed to strengthening Bangladesh&#x27;s global image.
                   </p>
                   <div className="spacer-medium"></div>
@@ -47,11 +47,11 @@ export default function AboutSection() {
                       data-loading="eager"
                     ></div>
                     <div className="about_item-texts">
-                      <h3 className="about_item-title" style={{ color: "#0f1011" }}>
+                      <h3 className="about_item-title text-[#0f1011]">
                         Bangladesh Based
                       </h3>
                       <div>
-                        <p className="text-size-small text-weight-medium" style={{ color: "#52525b" }}>
+                        <p className="text-size-small text-weight-medium text-zinc-600">
                           Operating from Dhaka — deeply embedded in the nation&#x27;s development story
                         </p>
                       </div>
@@ -75,11 +75,11 @@ export default function AboutSection() {
                       data-loading="eager"
                     ></div>
                     <div className="about_item-texts">
-                      <h3 className="about_item-title" style={{ color: "#0f1011" }}>
+                      <h3 className="about_item-title text-[#0f1011]">
                         Mission-driven storytelling
                       </h3>
                       <div>
-                        <p className="text-size-small text-weight-medium" style={{ color: "#52525b" }}>
+                        <p className="text-size-small text-weight-medium text-zinc-600">
                           We document real progress, build public trust, and inspire national pride
                         </p>
                       </div>
@@ -98,7 +98,7 @@ export default function AboutSection() {
                   <h3 className="home-grid_team-heading">
                     A dedicated crew of filmmakers and storytellers
                   </h3>
-                  <div className="text-style-label-caption" style={{ color: "#a1a1aa" }}>
+                  <div className="text-style-label-caption text-zinc-400">
                     Not AI-generated content
                   </div>
                 </div>
@@ -182,54 +182,6 @@ export default function AboutSection() {
                 </div>
 
                 <canvas id="space" className="space-canvas"></canvas>
-
-                {/* Team Member Visible Badges (Requirement 7 Criterion 7) */}
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "20px",
-                    left: "20px",
-                    right: "20px",
-                    zIndex: 10,
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "8px",
-                    justifyContent: "center",
-                  }}
-                >
-                  <div
-                    style={{
-                      background: "rgba(15, 16, 17, 0.8)",
-                      backdropFilter: "blur(8px)",
-                      border: "1px solid rgba(255, 255, 255, 0.12)",
-                      borderRadius: "20px",
-                      padding: "6px 14px",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      fontSize: "12px",
-                    }}
-                  >
-                    <span style={{ fontWeight: 700, color: "#ffffff" }}>Saikat Al Mumeetu</span>
-                    <span style={{ color: "#d4d4d8" }}>— Executive Director &amp; Lead Filmmaker</span>
-                  </div>
-                  <div
-                    style={{
-                      background: "rgba(15, 16, 17, 0.8)",
-                      backdropFilter: "blur(8px)",
-                      border: "1px solid rgba(255, 255, 255, 0.12)",
-                      borderRadius: "20px",
-                      padding: "6px 14px",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      fontSize: "12px",
-                    }}
-                  >
-                    <span style={{ fontWeight: 700, color: "#ffffff" }}>Cinematography Team</span>
-                    <span style={{ color: "#d4d4d8" }}>— 4K Drone Pilots &amp; Field Crew</span>
-                  </div>
-                </div>
               </div>
             </div>
           </div>

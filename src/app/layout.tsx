@@ -8,6 +8,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://upliftbangladesh.com"),
   title: "Uplift Bangladesh | International Documentary Filmmaker & Development Media",
   description:
     "Bangladesh's leading development-focused media and documentary platform. Documenting progress, infrastructure, mega-projects, innovation, and shaping global perception.",

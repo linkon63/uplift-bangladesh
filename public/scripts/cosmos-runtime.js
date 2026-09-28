@@ -1464,7 +1464,8 @@
             london: 'Europe/London',
             newyork: 'America/New_York',
             kyiv: 'Europe/Kyiv',
-            dubai: 'Asia/Dubai'
+            dubai: 'Asia/Dubai',
+            dhaka: 'Asia/Dhaka'
         };
 
         function updateClocks() {
@@ -1474,26 +1475,40 @@
                 const card = document.querySelector(`[data-time="${city}"]`);
                 if (!card) continue;
 
-                const parts = new Intl.DateTimeFormat('en-US', {
-                    timeZone,
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: true
-                }).formatToParts(now);
+                try {
+                    const parts = new Intl.DateTimeFormat('en-US', {
+                        timeZone,
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true
+                    }).formatToParts(now);
 
-                const hour = parts.find(p => p.type === 'hour').value;
-                const minute = parts.find(p => p.type === 'minute').value;
-                const period = parts.find(p => p.type === 'dayPeriod').value;
+                    const hour = parts.find(p => p.type === 'hour')?.value;
+                    const minute = parts.find(p => p.type === 'minute')?.value;
+                    const period = parts.find(p => p.type === 'dayPeriod')?.value;
 
-                card.querySelector('.time').textContent = `${hour}:${minute}`;
-                card.querySelector('.time-pm').textContent = period.toLowerCase();
+                    const timeEl = card.querySelector('.time, .timer-clock-active');
+                    if (timeEl && hour && minute) {
+                        timeEl.textContent = `${hour}:${minute}`;
+                    }
 
-                card.querySelector('.date').textContent = new Intl.DateTimeFormat('en-US', {
-                    timeZone,
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric'
-                }).format(now);
+                    const periodEl = card.querySelector('.time-pm, .timer-clock-pm');
+                    if (periodEl && period) {
+                        periodEl.textContent = period.toLowerCase();
+                    }
+
+                    const dateEl = card.querySelector('.date');
+                    if (dateEl) {
+                        dateEl.textContent = new Intl.DateTimeFormat('en-US', {
+                            timeZone,
+                            weekday: 'long',
+                            month: 'long',
+                            day: 'numeric'
+                        }).format(now);
+                    }
+                } catch (err) {
+                    // Ignore timezone formatting exceptions
+                }
             }
         }
 

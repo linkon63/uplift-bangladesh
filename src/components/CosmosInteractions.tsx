@@ -4,17 +4,23 @@ import { useEffect } from "react";
 
 export default function CosmosInteractions() {
   useEffect(() => {
-    // 0. INITIALIZE WEBFLOW RUNTIME IF AVAILABLE
+    // ── 0. INITIALIZE WEBFLOW RUNTIME IF AVAILABLE
     const tryInitWebflow = () => {
-      const w = window as any;
+      const w = window as unknown as {
+        Webflow?: {
+          destroy?: () => void;
+          ready?: () => void;
+          require?: (name: string) => { init?: () => void; emit?: (evt: string) => void } | undefined;
+        };
+      };
       if (w.Webflow) {
         try {
           w.Webflow.destroy?.();
           w.Webflow.ready?.();
-          w.Webflow.require?.("ix2")?.init();
+          w.Webflow.require?.("ix2")?.init?.();
           const wfIx = w.Webflow.require?.("ix3");
-          if (wfIx) wfIx.emit("tabs");
-        } catch (e) {
+          if (wfIx?.emit) wfIx.emit("tabs");
+        } catch {
           // ignore webflow reinit errors
         }
       }
@@ -22,305 +28,252 @@ export default function CosmosInteractions() {
     tryInitWebflow();
     window.addEventListener("load", tryInitWebflow);
 
-    // 1. SERVICES TAB SWITCHER (Services <-> Industries)
-    document.querySelectorAll(".w-tabs").forEach((tabGroup) => {
-      const links = tabGroup.querySelectorAll(".w-tab-link");
-      const panes = tabGroup.querySelectorAll(".w-tab-pane");
+    // ── 1. SERVICES TAB SWITCHER (Tab 1 <-> Tab 2)
+    const initTabs = () => {
+      document.querySelectorAll(".w-tabs").forEach((tabGroup) => {
+        const links = tabGroup.querySelectorAll(".w-tab-link");
+        const panes = tabGroup.querySelectorAll(".w-tab-pane");
 
-      links.forEach((link) => {
-        link.addEventListener("click", (e) => {
-          e.preventDefault();
-          const tabId = link.getAttribute("data-w-tab");
-          if (!tabId) return;
+        links.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const tabId = link.getAttribute("data-w-tab");
+            if (!tabId) return;
 
-          links.forEach((l) => l.classList.remove("w--current"));
-          link.classList.add("w--current");
+            links.forEach((l) => l.classList.remove("w--current"));
+            link.classList.add("w--current");
 
-          panes.forEach((pane) => {
-            const p = pane as HTMLElement;
-            if (p.getAttribute("data-w-tab") === tabId) {
-              p.classList.add("w--tab-active");
-              p.style.display = "block";
-              p.style.opacity = "1";
-            } else {
-              p.classList.remove("w--tab-active");
-              p.style.display = "none";
-              p.style.opacity = "0";
-            }
+            panes.forEach((pane) => {
+              const p = pane as HTMLElement;
+              if (p.getAttribute("data-w-tab") === tabId) {
+                p.classList.add("w--tab-active");
+                p.style.display = "block";
+                p.style.opacity = "1";
+              } else {
+                p.classList.remove("w--tab-active");
+                p.style.display = "none";
+                p.style.opacity = "0";
+              }
+            });
           });
         });
       });
-    });
-
-    // 2. WORKS CARDS SCROLL PARALLAX & STACKING — NEW STRUCTURE
-    const stackCards = document.querySelectorAll(".works-stack__item");
-    const projects = [
-      { milestone: "National Pride", sector: "Mega Infrastructure & Engineering" },
-      { milestone: "Smart Urban Transit", sector: "Urban Planning & Modern Mobility" },
-      { milestone: "Global Aviation Gateway", sector: "Aviation, Tourism & Global Logistics" },
-      { milestone: "South Asia's 1st Underwater Tunnel", sector: "Engineering Innovation & Connectivity" },
-      { milestone: "Nuclear Energy Era", sector: "Clean Energy & Sustainable Power" },
-      { milestone: "Maritime Economic Engine", sector: "Deep Sea Port & Export Logistics" },
-    ];
-
-    const milestoneEl = document.querySelector('[data-works-meta="milestone"]') as HTMLElement | null;
-    const sectorEl = document.querySelector('[data-works-meta="sector"]') as HTMLElement | null;
-    let currentActiveIdx = 0;
-
-    const updateMeta = (idx: number) => {
-      if (idx === currentActiveIdx || idx < 0 || idx >= projects.length) return;
-      currentActiveIdx = idx;
-
-      const data = projects[idx];
-      if (milestoneEl) {
-        milestoneEl.classList.add("is-leaving");
-        setTimeout(() => {
-          milestoneEl.textContent = data.milestone;
-          milestoneEl.classList.remove("is-leaving");
-          milestoneEl.classList.add("is-entering");
-          setTimeout(() => milestoneEl.classList.remove("is-entering"), 50);
-        }, 200);
-      }
-      if (sectorEl) {
-        sectorEl.classList.add("is-leaving");
-        setTimeout(() => {
-          sectorEl.textContent = data.sector;
-          sectorEl.classList.remove("is-leaving");
-          sectorEl.classList.add("is-entering");
-          setTimeout(() => sectorEl.classList.remove("is-entering"), 50);
-        }, 200);
-      }
     };
+    initTabs();
 
-    const handleScroll = () => {
-      stackCards.forEach((item, idx) => {
-        const cardEl = item.querySelector(".works-card") as HTMLElement | null;
-        if (!cardEl) return;
+    // ── 2. WORKS SECTION SCROLL SCALE & 3D CARD STACKING EFFECT (cosmos.studio continuous interaction)
+    const workItems = Array.from(document.querySelectorAll<HTMLElement>(".works_item"));
+    let worksRafId: number | null = null;
+
+    const handleWorksScroll = () => {
+      if (window.innerWidth < 992) {
+        // Tablet / Mobile: reset inline styles so cards flow naturally
+        workItems.forEach((item) => {
+          const wrap = item.querySelector<HTMLElement>(".works_card-wrap");
+          const img = item.querySelector<HTMLElement>(".works_image");
+          const infos = item.querySelector<HTMLElement>(".works_infos");
+          if (wrap) {
+            wrap.style.transform = "";
+            wrap.style.filter = "";
+          }
+          if (img) {
+            img.style.removeProperty("--img-scroll-scale");
+          }
+          if (infos) {
+            infos.style.opacity = "";
+          }
+        });
+        return;
+      }
+
+      const vh = window.innerHeight;
+      const total = workItems.length;
+
+      workItems.forEach((item, index) => {
+        const wrap = item.querySelector<HTMLElement>(".works_card-wrap");
+        const img = item.querySelector<HTMLElement>(".works_image");
+        const infos = item.querySelector<HTMLElement>(".works_infos");
+        if (!wrap) return;
 
         const rect = item.getBoundingClientRect();
-        const vh = window.innerHeight;
-        const cardTop = rect.top;
 
-        // Determine active card for meta update
-        if (cardTop < vh * 0.5 && cardTop > -rect.height * 0.3) {
-          updateMeta(idx);
+        // 1. Entrance animation (Webflow a-5 "Works item scale"):
+        // rect.top starts at vh (bottom of viewport) and decreases to 0 (top of viewport where it sticks)
+        const enterProgress = Math.min(1, Math.max(0, (vh - rect.top) / vh));
+        const entryScale = 1.08 - 0.08 * enterProgress;
+        const entryImgScale = 1.18 - 0.18 * enterProgress;
+
+        // 2. Multi-card deck stacking (as subsequent cards scroll up over this pinned card):
+        let exitProgress = 0;
+        if (index < total - 1) {
+          const nextItem = workItems[index + 1];
+          const nextRect = nextItem.getBoundingClientRect();
+          exitProgress = Math.min(1, Math.max(0, (vh - nextRect.top) / vh));
         }
 
-        // Scale & brightness effect as next card scrolls in
-        if (idx < stackCards.length - 1) {
-          const nextCard = stackCards[idx + 1];
-          const nextRect = nextCard.getBoundingClientRect();
+        let finalCardScale = entryScale;
+        let brightness = 1;
+        let infosOpacity = 1;
 
-          if (nextRect.top < vh && nextRect.top > 0) {
-            const progress = 1 - nextRect.top / vh;
-            const scale = 1 - progress * 0.05;
-            const brightness = 1 - progress * 0.12;
-            cardEl.style.transform = `scale(${scale})`;
-            cardEl.style.filter = `brightness(${brightness})`;
-          } else if (nextRect.top <= 0) {
-            cardEl.style.transform = "scale(0.95)";
-            cardEl.style.filter = "brightness(0.88)";
-          } else {
-            cardEl.style.transform = "scale(1)";
-            cardEl.style.filter = "brightness(1)";
-          }
-        } else {
-          cardEl.style.transform = "scale(1)";
-          cardEl.style.filter = "brightness(1)";
+        if (rect.top <= 10 && exitProgress > 0) {
+          // Card is pinned at top and next card is rising to cover it
+          finalCardScale = 1.0 - 0.06 * exitProgress;
+          brightness = 1.0 - 0.15 * exitProgress;
+          infosOpacity = Math.max(0, 1.0 - 1.25 * exitProgress);
+        } else if (rect.top > 10) {
+          // Entering card: fade in infos as it approaches center
+          infosOpacity = Math.min(1, Math.max(0, (enterProgress - 0.35) / 0.65));
+        }
+
+        wrap.style.transform = `scale(${finalCardScale.toFixed(4)})`;
+        wrap.style.filter = brightness < 0.99 ? `brightness(${brightness.toFixed(3)})` : "";
+
+        if (img) {
+          img.style.setProperty("--img-scroll-scale", entryImgScale.toFixed(4));
+        }
+
+        if (infos) {
+          infos.style.opacity = infosOpacity.toFixed(3);
         }
       });
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
 
-    // 3. STARFIELD CANVAS ANIMATION (#space)
-    let rafId: number | null = null;
-    const cv = document.getElementById("space") as HTMLCanvasElement | null;
+    const onWorksScroll = () => {
+      if (worksRafId !== null) return;
+      worksRafId = window.requestAnimationFrame(() => {
+        handleWorksScroll();
+        worksRafId = null;
+      });
+    };
 
-    if (cv && typeof cv.getContext === "function") {
-      const x = cv.getContext("2d");
-      if (x) {
-        const SPEED = 0.00005;
-        const r = (a: number, b: number) => a + Math.random() * (b - a);
+    window.addEventListener("scroll", onWorksScroll, { passive: true });
+    window.addEventListener("resize", onWorksScroll, { passive: true });
+    handleWorksScroll();
 
-        let W = 0,
-          H = 0,
-          cx = 0,
-          cy = 0,
-          D = 1,
-          F = 0,
-          N = 0,
-          last = performance.now();
+    // ── 3. NAVBAR AUTO-HIDE ON SCROLL DOWN, REVEAL ON SCROLL UP
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    const navbarContent = document.querySelector(".navbar_content") as HTMLElement | null;
 
-        interface Star {
-          x: number;
-          y: number;
-          z: number;
-          px: number;
-          py: number;
-          fresh: boolean;
-        }
+    if (navbarContent) {
+      navbarContent.style.transition = "transform 0.45s cubic-bezier(0.215, 0.61, 0.355, 1)";
+    }
 
-        let stars: Star[] = [];
-
-        const resetStar = (s: Star) => {
-          s.x = r(-1, 1);
-          s.y = r(-1, 1);
-          s.z = 1;
-          s.fresh = true;
-        };
-
-        const projectStar = (s: Star) => {
-          const k = F / s.z;
-          s.px = cx + s.x * k;
-          s.py = cy + s.y * k;
-        };
-
-        const build = () => {
-          D = Math.min(window.devicePixelRatio || 1, 2);
-          W = cv.clientWidth || window.innerWidth;
-          H = cv.clientHeight || window.innerHeight;
-          cx = W / 2;
-          cy = H / 2;
-          F = cx * 0.7;
-          cv.width = W * D;
-          cv.height = H * D;
-          x.setTransform(D, 0, 0, D, 0, 0);
-          N = Math.min(Math.round(W * H * 0.0004), 700);
-          stars = [];
-          for (let i = 0; i < N; i++) {
-            const s: Star = { x: 0, y: 0, z: 0, px: 0, py: 0, fresh: true };
-            resetStar(s);
-            s.z = r(0.05, 1);
-            projectStar(s);
-            stars.push(s);
-          }
-        };
-
-        const frame = (t: number) => {
-          const dt = Math.min(t - last, 50);
-          last = t;
-          x.clearRect(0, 0, W, H);
-          x.fillStyle = "#fff";
-          x.strokeStyle = "#fff";
-
-          for (let i = 0; i < N; i++) {
-            const s = stars[i];
-            s.z -= dt * SPEED;
-            if (s.z < 0.02) {
-              resetStar(s);
-              projectStar(s);
-              continue;
-            }
-            const ox = s.px,
-              oy = s.py;
-            projectStar(s);
-            if (s.px < -50 || s.px > W + 50 || s.py < -50 || s.py > H + 50) {
-              resetStar(s);
-              projectStar(s);
-              continue;
-            }
-            const d = 1 - s.z;
-            const a = Math.min(d * 1.1, 1);
-            const w = 0.4 + d * 1.8;
-            x.globalAlpha = a;
-            if (s.fresh) {
-              s.fresh = false;
-            } else if (d > 0.55) {
-              x.lineWidth = w;
-              x.beginPath();
-              x.moveTo(ox, oy);
-              x.lineTo(s.px, s.py);
-              x.stroke();
-            }
-            x.beginPath();
-            x.arc(s.px, s.py, w * 0.6, 0, 6.2832);
-            x.fill();
-          }
-          rafId = requestAnimationFrame(frame);
-        };
-
-        build();
-        last = performance.now();
-        rafId = requestAnimationFrame(frame);
-
-        const handleResize = () => build();
-        const handleVisibility = () => {
-          if (document.hidden) {
-            if (rafId) cancelAnimationFrame(rafId);
-            rafId = null;
-          } else {
-            if (!rafId) {
-              last = performance.now();
-              rafId = requestAnimationFrame(frame);
+    const handleNavScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (navbarContent) {
+            if (currentScrollY > 120 && currentScrollY > lastScrollY) {
+              // Scrolling down
+              navbarContent.style.transform = "translateY(-120%)";
+            } else {
+              // Scrolling up or at top
+              navbarContent.style.transform = "translateY(0%)";
             }
           }
-        };
+          lastScrollY = Math.max(0, currentScrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener("scroll", handleNavScroll, { passive: true });
 
-        window.addEventListener("resize", handleResize);
-        document.addEventListener("visibilitychange", handleVisibility);
+    // ── 4. CHAT ANIMATION IN WHY CHOOSE US (.home-grid_chat)
+    const chatContainer = document.querySelector(".home-grid_chat") as HTMLElement | null;
+    if (chatContainer) {
+      const msg1 = chatContainer.querySelector(".home-grid_chat-group._1") as HTMLElement | null;
+      const msg2 = chatContainer.querySelector(".home-grid_chat-group._2") as HTMLElement | null;
+
+      if (msg1) {
+        msg1.style.opacity = "0";
+        msg1.style.transform = "translateY(16px)";
+        msg1.style.transition = "opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+      }
+      if (msg2) {
+        msg2.style.opacity = "0";
+        msg2.style.transform = "translateY(16px)";
+        msg2.style.transition = "opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+      }
+
+      if ("IntersectionObserver" in window) {
+        const chatObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                setTimeout(() => {
+                  if (msg1) {
+                    msg1.style.opacity = "1";
+                    msg1.style.transform = "translateY(0)";
+                  }
+                }, 200);
+                setTimeout(() => {
+                  if (msg2) {
+                    msg2.style.opacity = "1";
+                    msg2.style.transform = "translateY(0)";
+                  }
+                }, 900);
+                chatObserver.disconnect();
+              }
+            });
+          },
+          { threshold: 0.3 }
+        );
+        chatObserver.observe(chatContainer);
       }
     }
 
-    // 4. LIVE WORLD CLOCKS (Dhaka, Kyiv, London, New York, Dubai)
-    const cities: Record<string, string> = {
-      dhaka: "Asia/Dhaka",
-      london: "Europe/London",
-      newyork: "America/New_York",
-      kyiv: "Europe/Kyiv",
-      dubai: "Asia/Dubai",
-    };
+    // ── 5. LOTTIE ANIMATIONS LOADER
+    const loadLotties = () => {
+      const lottieElements = document.querySelectorAll('[data-animation-type="lottie"]');
+      if (!lottieElements.length) return;
 
-    const updateClocks = () => {
-      const now = new Date();
-      for (const [city, timeZone] of Object.entries(cities)) {
-        const cards = document.querySelectorAll(`[data-time="${city}"]`);
-        cards.forEach((card) => {
-          try {
-            const parts = new Intl.DateTimeFormat("en-US", {
-              timeZone,
-              hour: "numeric",
-              minute: "2-digit",
-              hour12: true,
-            }).formatToParts(now);
+      interface LottieInstance {
+        loadAnimation: (options: {
+          container: Element;
+          renderer: string;
+          loop: boolean;
+          autoplay: boolean;
+          path: string;
+        }) => void;
+      }
 
-            const hour = parts.find((p) => p.type === "hour")?.value || "";
-            const minute = parts.find((p) => p.type === "minute")?.value || "";
-            const period = parts.find((p) => p.type === "dayPeriod")?.value || "";
+      const runPlayer = (bodymovin: LottieInstance) => {
+        lottieElements.forEach((el) => {
+          if (el.querySelector("svg")) return; // already loaded
+          const src = el.getAttribute("data-src");
+          if (!src) return;
 
-            const timeEl = card.querySelector(".time");
-            const timePmEl = card.querySelector(".time-pm");
-            const dateEl = card.querySelector(".date");
-
-            if (timeEl) timeEl.textContent = `${hour}:${minute}`;
-            if (timePmEl) timePmEl.textContent = period.toLowerCase();
-            if (dateEl) {
-              dateEl.textContent = new Intl.DateTimeFormat("en-US", {
-                timeZone,
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-              }).format(now);
-            }
-          } catch (e) {
-            // ignore
-          }
+          bodymovin.loadAnimation({
+            container: el,
+            renderer: el.getAttribute("data-renderer") || "svg",
+            loop: el.getAttribute("data-loop") === "1",
+            autoplay: el.getAttribute("data-autoplay") === "1",
+            path: src,
+          });
         });
+      };
+
+      const w = window as unknown as { bodymovin?: LottieInstance; lottie?: LottieInstance };
+      if (w.bodymovin || w.lottie) {
+        const instance = w.bodymovin || w.lottie;
+        if (instance) runPlayer(instance);
+      } else {
+        const script = document.createElement("script");
+        script.src = "https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js";
+        script.async = true;
+        script.onload = () => {
+          const win = window as unknown as { bodymovin?: LottieInstance; lottie?: LottieInstance };
+          const bm = win.bodymovin || win.lottie;
+          if (bm) runPlayer(bm);
+        };
+        document.head.appendChild(script);
       }
     };
-    updateClocks();
-    const clockInterval = setInterval(updateClocks, 1000);
+    loadLotties();
 
-    // 5. SERVICES COUNTER
-    document.querySelectorAll("[data-count]").forEach((countEl) => {
-      const key = countEl.getAttribute("data-count");
-      if (!key) return;
-      const list = document.querySelector(`[data-items="${key}"]`);
-      if (list) {
-        countEl.textContent = `(${list.children.length})`;
-      }
-    });
-
-    // 6. RANDOM DANCING COSMONAUT VIDEO
+    // ── 6. DANCING COSMONAUT VIDEO (.dance-vid in CtaSection)
     const danceVideo = document.querySelector(".dance-vid") as HTMLVideoElement | null;
     if (danceVideo) {
       const dances = [
@@ -358,23 +311,26 @@ export default function CosmosInteractions() {
       };
 
       if ("IntersectionObserver" in window) {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              startDance();
-              danceVideo.play().catch(() => {});
-            } else if (started) {
-              danceVideo.pause();
-            }
-          });
-        }, { rootMargin: "200px 0px" });
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                startDance();
+                danceVideo.play().catch(() => {});
+              } else if (started) {
+                danceVideo.pause();
+              }
+            });
+          },
+          { rootMargin: "200px 0px" }
+        );
         io.observe(danceVideo);
       } else {
         startDance();
       }
     }
 
-    // 7. HERO & CUSTOM VIDEO CONTROLS
+    // ── 7. HERO & LAZYLOAD VIDEO CONTROLS
     document.querySelectorAll("[data-video]").forEach((wrap) => {
       const video = wrap.querySelector("video");
       const btn = wrap.querySelector(".play-pause") as HTMLButtonElement | null;
@@ -382,7 +338,6 @@ export default function CosmosInteractions() {
 
       const pauseIcon = btn.querySelector('[data-state="play"]') as HTMLElement | null;
       const playIcon = btn.querySelector('[data-state="pause"]') as HTMLElement | null;
-
       btn.type = "button";
 
       const sync = () => {
@@ -410,90 +365,12 @@ export default function CosmosInteractions() {
       sync();
     });
 
-    // 8. BACKGROUND VIDEO TOGGLE BUTTONS
-    document.querySelectorAll("[data-w-bg-video-control]").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        const id = btn.getAttribute("aria-controls");
-        if (!id) return;
-        const video = document.getElementById(id) as HTMLVideoElement | null;
-        if (!video) return;
-        const spans = btn.querySelectorAll("span");
-        if (video.paused) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-        }
-        if (spans[0]) spans[0].hidden = video.paused;
-        if (spans[1]) spans[1].hidden = !video.paused;
-      });
-    });
+    // ── 8. MOBILE NAVBAR IS HANDLED NATIVELY WITH REACT STATE IN Navbar.tsx
 
-    // 9. MOBILE NAVBAR TOGGLE & CLOSE
-    const menuToggle = document.querySelector(".navbar_menu-open") as HTMLElement | null;
-    const menuDrawer = document.getElementById("mobile-menu");
-    const menuBg = document.querySelector(".menu_bg") as HTMLElement | null;
-    const menuCloseBtn = document.querySelector(".menu_close") as HTMLElement | null;
-
-    const setMenuOpen = (open: boolean) => {
-      if (menuToggle) {
-        menuToggle.classList.toggle("open", open);
-        menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
-      }
-      if (menuDrawer) {
-        menuDrawer.classList.toggle("is-open", open);
-      }
-      if (menuBg) {
-        menuBg.classList.toggle("is-open", open);
-      }
-      document.body.style.overflow = open ? "hidden" : "";
-    };
-
-    if (menuToggle) {
-      menuToggle.onclick = (e) => {
-        e.preventDefault();
-        const willOpen = !menuDrawer?.classList.contains("is-open");
-        setMenuOpen(willOpen);
-      };
-    }
-
-    if (menuCloseBtn) {
-      menuCloseBtn.onclick = (e) => {
-        e.preventDefault();
-        setMenuOpen(false);
-      };
-    }
-
-    if (menuBg) {
-      menuBg.onclick = () => {
-        setMenuOpen(false);
-      };
-    }
-
-    // Auto close mobile menu when clicking any nav link
-    if (menuDrawer) {
-      menuDrawer.querySelectorAll("a").forEach((link) => {
-        link.addEventListener("click", () => {
-          setMenuOpen(false);
-        });
-      });
-    }
-
-    // Dropdown toggle on click for mobile and touch devices
-    document.querySelectorAll(".w-dropdown-toggle").forEach((toggle) => {
-      toggle.addEventListener("click", (e) => {
-        const parent = toggle.closest(".w-dropdown");
-        if (parent) {
-          parent.classList.toggle("w--open");
-        }
-      });
-    });
-
-    // 10. NAVBAR ROTATING LOGO TEXT
+    // ── 9. NAVBAR ROTATING LOGO TEXT
     const animTexts = document.querySelectorAll(".navbar_logo-anim_text");
     let currentTextIdx = 0;
-    let textInterval: any = null;
+    let textInterval: ReturnType<typeof setInterval> | null = null;
     if (animTexts.length > 1) {
       animTexts.forEach((el, i) => {
         const h = el as HTMLElement;
@@ -526,7 +403,7 @@ export default function CosmosInteractions() {
       }, 3000);
     }
 
-    // 11. SCROLL TO TOP
+    // ── 10. SCROLL TO TOP BUTTON
     const scrollTop = document.querySelector(".scroll-top");
     if (scrollTop) {
       scrollTop.addEventListener("click", (e) => {
@@ -535,41 +412,12 @@ export default function CosmosInteractions() {
       });
     }
 
-    // 12. SERVICES SECTION TAB SWITCHER (new structure)
-    const serviceTabs = document.querySelectorAll("[data-services-tab]");
-    const servicePanes = document.querySelectorAll("[data-services-pane]");
-
-    serviceTabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const paneId = tab.getAttribute("data-services-tab");
-        if (!paneId) return;
-
-        // Update tabs
-        serviceTabs.forEach((t) => {
-          t.classList.remove("services-tab--active");
-          t.setAttribute("aria-selected", "false");
-        });
-        tab.classList.add("services-tab--active");
-        tab.setAttribute("aria-selected", "true");
-
-        // Update panes
-        servicePanes.forEach((pane) => {
-          const pid = pane.getAttribute("data-services-pane");
-          if (pid === paneId) {
-            pane.classList.add("services-pane--active");
-          } else {
-            pane.classList.remove("services-pane--active");
-          }
-        });
-      });
-    });
-
-
     return () => {
-      clearInterval(clockInterval);
+      window.removeEventListener("scroll", onWorksScroll);
+      window.removeEventListener("resize", onWorksScroll);
+      if (worksRafId !== null) cancelAnimationFrame(worksRafId);
+      window.removeEventListener("scroll", handleNavScroll);
       if (textInterval) clearInterval(textInterval);
-      if (rafId) cancelAnimationFrame(rafId);
-      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 

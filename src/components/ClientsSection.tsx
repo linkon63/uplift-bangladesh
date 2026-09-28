@@ -48,135 +48,44 @@ export default function ClientsSection() {
                 </div>
               </div>
               <div className="clients_auth">
-                <div
-                  style={{
-                    background:
-                      "radial-gradient(circle at 10% 20%, rgba(238, 48, 40, 0.1) 0%, rgba(255, 255, 255, 0.02) 90%), #141517",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                    borderRadius: "16px",
-                    padding: "28px 24px",
-                    minHeight: "340px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    color: "#ffffff",
-                  }}
-                >
+                <div className="bg-[#141517] bg-[radial-gradient(circle_at_10%_20%,rgba(238,48,40,0.1)_0%,rgba(255,255,255,0.02)_90%)] border border-white/10 rounded-2xl p-6 min-h-[340px] flex flex-col justify-between text-white">
                   <div>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        marginBottom: "16px",
-                      }}
-                    >
-                      <span
-                        style={{
-                          display: "inline-block",
-                          width: "8px",
-                          height: "8px",
-                          borderRadius: "50%",
-                          background: "#EE3028",
-                          boxShadow: "0 0 10px #EE3028",
-                        }}
-                      ></span>
-                      <span
-                        style={{
-                          fontSize: "11px",
-                          letterSpacing: "1.5px",
-                          textTransform: "uppercase",
-                          color: "rgba(255,255,255,0.7)",
-                        }}
-                      >
+                    <div className="flex items-center gap-2.5 mb-4">
+                      <span className="inline-block w-2 h-2 rounded-full bg-[#EE3028] shadow-[0_0_10px_#EE3028]"></span>
+                      <span className="text-[11px] tracking-[1.5px] uppercase text-white/70">
                         Organic Platform Impact
                       </span>
                     </div>
-                    <div
-                      style={{
-                        fontSize: "38px",
-                        fontWeight: "800",
-                        letterSpacing: "-1px",
-                        lineHeight: "1.1",
-                        color: "#fff",
-                      }}
-                    >
+                    <div className="text-4xl font-extrabold tracking-tight leading-tight text-white">
                       1,000,000+
                     </div>
-                    <div
-                      style={{
-                        fontSize: "13px",
-                        color: "rgba(255,255,255,0.6)",
-                        marginTop: "4px",
-                      }}
-                    >
+                    <div className="text-[13px] text-white/60 mt-1">
                       Combined Digital Community Across Platforms
                     </div>
                   </div>
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr",
-                      gap: "12px",
-                      margin: "20px 0",
-                    }}
-                  >
-                    <div
-                      style={{
-                        background: "rgba(255,255,255,0.04)",
-                        borderRadius: "10px",
-                        padding: "12px 14px",
-                        border: "1px solid rgba(255,255,255,0.06)",
-                      }}
-                    >
-                      <div style={{ fontSize: "20px", fontWeight: "700", color: "#ffffff" }}>
+                  <div className="grid grid-cols-2 gap-3 my-5">
+                    <div className="bg-white/[0.04] rounded-[10px] p-3 border border-white/[0.06]">
+                      <div className="text-xl font-bold text-white">
                         451,000+
                       </div>
-                      <div
-                        style={{
-                          fontSize: "11px",
-                          color: "rgba(255,255,255,0.5)",
-                          marginTop: "2px",
-                        }}
-                      >
+                      <div className="text-[11px] text-white/50 mt-0.5">
                         YouTube Subscribers
                       </div>
                     </div>
-                    <div
-                      style={{
-                        background: "rgba(255,255,255,0.04)",
-                        borderRadius: "10px",
-                        padding: "12px 14px",
-                        border: "1px solid rgba(255,255,255,0.06)",
-                      }}
-                    >
-                      <div style={{ fontSize: "20px", fontWeight: "700", color: "#ffffff" }}>
+                    <div className="bg-white/[0.04] rounded-[10px] p-3 border border-white/[0.06]">
+                      <div className="text-xl font-bold text-white">
                         681,000+
                       </div>
-                      <div
-                        style={{
-                          fontSize: "11px",
-                          color: "rgba(255,255,255,0.5)",
-                          marginTop: "2px",
-                        }}
-                      >
+                      <div className="text-[11px] text-white/50 mt-0.5">
                         Facebook Followers
                       </div>
                     </div>
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      borderTop: "1px solid rgba(255,255,255,0.08)",
-                      paddingTop: "14px",
-                    }}
-                  >
-                    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)" }}>
+                  <div className="flex justify-between items-center border-t border-white/[0.08] pt-3.5">
+                    <span className="text-xs text-white/75">
                       100% Organic Reach
                     </span>
-                    <span style={{ fontSize: "11px", color: "#EE3028", fontWeight: "600" }}>
+                    <span className="text-[11px] text-[#EE3028] font-semibold">
                       Verified Audience ✓
                     </span>
                   </div>
@@ -196,14 +105,7 @@ export default function ClientsSection() {
                   <div aria-hidden="true" className="clients_number">
                     ({client.id})
                   </div>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "800",
-                      letterSpacing: "0.5px",
-                      color: "#0f1011",
-                    }}
-                  >
+                  <div className="text-base font-extrabold tracking-wide text-brand-dark">
                     {client.code}
                   </div>
                 </div>
@@ -222,14 +124,7 @@ export default function ClientsSection() {
                   <div aria-hidden="true" className="clients_number">
                     ({client.id})
                   </div>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "800",
-                      letterSpacing: "0.5px",
-                      color: "#0f1011",
-                    }}
-                  >
+                  <div className="text-base font-extrabold tracking-wide text-brand-dark">
                     {client.code}
                   </div>
                 </div>
@@ -248,14 +143,7 @@ export default function ClientsSection() {
                   <div aria-hidden="true" className="clients_number">
                     ({client.id})
                   </div>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: "800",
-                      letterSpacing: "0.5px",
-                      color: "#0f1011",
-                    }}
-                  >
+                  <div className="text-base font-extrabold tracking-wide text-brand-dark">
                     {client.code}
                   </div>
                 </div>

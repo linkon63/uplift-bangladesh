@@ -5,7 +5,7 @@ export default function WhyChooseUsSection() {
     <>
         <section id="why-choose-us" data-wf--services--variant="dark" className="section_home-services">
             <div className="padding-global is-tiny">
-                <div className="home-services_component" style={{ color: "#ffffff" }}>
+                <div className="home-services_component text-white">
                     <div className="padding-global">
                         <div className="padding-section-medium is-mobile-xsmall"></div>
                         <div className="container-large">
@@ -17,14 +17,14 @@ export default function WhyChooseUsSection() {
                                 <div className="max-width-xxlarge">
                                     <div className="text-color-white">
                                         <div className="text-align-center">
-                                            <h2 className="heading-style-h2" style={{ color: "#ffffff" }}>
+                                            <h2 className="heading-style-h2 text-white">
                                                 A trusted content partner bringing reach, credibility, and impact to your brand
                                             </h2>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="spacer-custom-2"></div>
-                                <p className="features_desc" style={{ color: "#b0b4c3", textAlign: "center", maxWidth: "780px" }}>
+                                <p className="features_desc text-[#b0b4c3] text-center max-w-[780px]">
                                     Transparent sponsorship pricing, authentic storytelling, and a strategy-focused approach to brand visibility.
                                 </p>
                                 <div className="spacer-medium"></div>
@@ -49,26 +49,6 @@ export default function WhyChooseUsSection() {
                                     </div>
                                 </a>
                                 <div className="spacer-xxlarge"></div>
-                                <div style={{
-                                    display: "grid",
-                                    gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
-                                    gap: "20px",
-                                    width: "100%",
-                                    marginBottom: "36px"
-                                }}>
-                                    <div style={{ background: "rgba(255, 255, 255, 0.04)", border: "1px solid rgba(255, 255, 255, 0.08)", borderRadius: "16px", padding: "24px" }}>
-                                        <h4 style={{ fontSize: "18px", fontWeight: 700, color: "#ffffff", marginBottom: "8px" }}>Pricing Transparency</h4>
-                                        <p style={{ fontSize: "14px", color: "#a1a1aa", lineHeight: "1.6", margin: 0 }}>Transparent sponsorship tiers with clear deliverable volumes, zero hidden surcharges, and complimentary omni-channel distribution.</p>
-                                    </div>
-                                    <div style={{ background: "rgba(255, 255, 255, 0.04)", border: "1px solid rgba(255, 255, 255, 0.08)", borderRadius: "16px", padding: "24px" }}>
-                                        <h4 style={{ fontSize: "18px", fontWeight: 700, color: "#ffffff", marginBottom: "8px" }}>Authentic Storytelling</h4>
-                                        <p style={{ fontSize: "14px", color: "#a1a1aa", lineHeight: "1.6", margin: 0 }}>Deep cinematic immersion with certified 4K drone pilots, ground cinema rigs, and narrative mastery that brings mega-projects to life.</p>
-                                    </div>
-                                    <div style={{ background: "rgba(255, 255, 255, 0.04)", border: "1px solid rgba(255, 255, 255, 0.08)", borderRadius: "16px", padding: "24px" }}>
-                                        <h4 style={{ fontSize: "18px", fontWeight: 700, color: "#ffffff", marginBottom: "8px" }}>Strategic Brand Positioning</h4>
-                                        <p style={{ fontSize: "14px", color: "#a1a1aa", lineHeight: "1.6", margin: 0 }}>Associating your brand with national pride and transformative progress to establish enduring authority in consumer and corporate sectors.</p>
-                                    </div>
-                                </div>
                                 <div className="features_grid">
                                     <div className="features_sync"><img
                                             src="https://cdn.prod.website-files.com/69f9c76884333229e651e7bc/69f9c76f84333229e651eac5_feature-1.webp"
@@ -208,7 +188,7 @@ export default function WhyChooseUsSection() {
                                                             </div>
                                                         </div><img loading="lazy"
                                                             src="/assets/img/logo/logo.png"
-                                                            alt="Uplift Bangladesh" className="chat_pic _2" style={{ objectFit: "contain", background: "#0b0c10" }} />
+                                                            alt="Uplift Bangladesh" className="chat_pic _2 object-contain bg-[#0b0c10]" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -244,7 +224,7 @@ export default function WhyChooseUsSection() {
                                     <div id="w-node-_0a62ecc4-5f80-8eb1-4336-7d525cfd03dd-e651e8e2"
                                         className="features_timeline">
                                         <div className="features_timeline-head">
-                                            <div className="features_timeline-heading" style={{ color: "#ffffff" }}>Content Delivery Timeline</div>
+                                            <div className="features_timeline-heading text-white">Content Delivery Timeline</div>
                                             <div className="features_timeline-data">
                                                 <div className="features_experts">
                                                     <div className="features_timeline-texts hide-small-screen">Certified Pilots
