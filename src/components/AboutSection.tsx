@@ -1,4 +1,5 @@
 import React from "react";
+import SpaceCanvas from "@/components/canvas/SpaceCanvas";
 
 export default function AboutSection() {
   return (
@@ -181,7 +182,7 @@ export default function AboutSection() {
                   />
                 </div>
 
-                <canvas id="space" className="space-canvas"></canvas>
+                <SpaceCanvas />
               </div>
             </div>
           </div>

@@ -1,114 +1,7 @@
 import React from "react";
+import { SPONSORSHIP_PACKAGES, SPONSORSHIP_BENEFITS, PARTNERSHIP_TERMS } from "@/data";
 
 export default function SponsorshipSection() {
-  const packages = [
-    {
-      platform: "YouTube",
-      badge: "Flagship Long-Form",
-      deliverable: "Long-Form Sponsored Documentary Videos",
-      quantity: "08 - 10 Videos / month",
-      investment: "৳ 15,000",
-      rateNote: "per content",
-      highlight: true,
-      features: [
-        "In-depth cinematic feature & site walkthrough",
-        "Contextual brand integration & executive interview",
-        "Permanent archival on YouTube (451K+ subscribers)",
-        "4K UHD mastering with professional color grade"
-      ]
-    },
-    {
-      platform: "Facebook",
-      badge: "High-Engagement Viral Reach",
-      deliverable: "Sponsored Short Video Reels",
-      quantity: "30 - 40 Reels / month",
-      investment: "৳ 5,000",
-      rateNote: "per content (Min. 5 content)",
-      highlight: false,
-      features: [
-        "Fast-paced, mobile-optimized vertical video",
-        "Direct access to 681,000+ active Facebook followers",
-        "High viral potential and organic shareability",
-        "Brand tag, call-to-action & product highlight"
-      ]
-    },
-    {
-      platform: "Instagram",
-      badge: "Complimentary Bonus",
-      deliverable: "Sponsored Short Video Reels",
-      quantity: "30 - 40 Reels / month",
-      investment: "COMPLIMENTARY",
-      rateNote: "For contracted annual partners",
-      highlight: false,
-      features: [
-        "Cross-posted high-aesthetic visual reels",
-        "Targeted at urban youth, designers & young professionals",
-        "Seamless storytelling with audio trends",
-        "Zero additional production surcharge"
-      ]
-    },
-    {
-      platform: "TikTok",
-      badge: "Complimentary Bonus",
-      deliverable: "Sponsored Short Video Reels",
-      quantity: "10 - 15 Reels / month",
-      investment: "COMPLIMENTARY",
-      rateNote: "For contracted annual partners",
-      highlight: false,
-      features: [
-        "Gen-Z & broad national demographic amplification",
-        "Fast-cut highlight snippets of mega infrastructure",
-        "Algorithm-friendly engaging formats",
-        "Zero additional production surcharge"
-      ]
-    }
-  ];
-
-  const keyBenefits = [
-    {
-      title: "100% Organic Audience",
-      desc: "A trusted community built naturally without artificial boosting, ensuring genuine engagement and authentic brand sentiment."
-    },
-    {
-      title: "Highly Relevant Demographics",
-      desc: "Direct access to over 1,000,000+ followers actively tracking real estate, economy, engineering, and national markets."
-    },
-    {
-      title: "High-Trust Platform Association",
-      desc: "Partnering with Bangladesh's premier nation-building media platform lends tremendous prestige, credibility, and national stature."
-    },
-    {
-      title: "Omni-Channel Amplification",
-      desc: "Simultaneous multi-platform coverage across YouTube, Facebook, Instagram, and TikTok for maximum market penetration."
-    }
-  ];
-
-  const terms = [
-    {
-      label: "Agreement Duration",
-      detail: "Strategic partnership agreement spans an initial term of 1 (one) year from date of execution."
-    },
-    {
-      label: "Payment Terms",
-      detail: "All monthly payments are strictly payable at the conclusion of each respective calendar month."
-    },
-    {
-      label: "Non-Cancellable Contract",
-      detail: "To guarantee continuous brand presence, narrative building, and campaign continuity, the contract is non-cancellable."
-    },
-    {
-      label: "Content Compensation",
-      detail: "Any deficit due to technical or operational factors is fully compensated in the subsequent month's schedule."
-    },
-    {
-      label: "Pure Organic Reach",
-      detail: "All viewership and reach generated will remain strictly organic, upholding authentic brand credibility."
-    },
-    {
-      label: "Renewal Option",
-      detail: "Preferential renewal options and legacy pricing structures are extended upon completion of the initial term."
-    }
-  ];
 
   return (
     <section id="sponsorship" data-wf--services--variant="dark" className="section_home-services">
@@ -136,7 +29,7 @@ export default function SponsorshipSection() {
 
               {/* Pricing Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {packages.map((pkg, i) => (
+                {SPONSORSHIP_PACKAGES.map((pkg, i) => (
                   <div
                     key={i}
                     className={`rounded-[20px] p-8 sm:p-6 flex flex-col justify-between relative backdrop-blur-xl transition-all duration-300 ${
@@ -244,7 +137,7 @@ export default function SponsorshipSection() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {keyBenefits.map((item, idx) => (
+                  {SPONSORSHIP_BENEFITS.map((item, idx) => (
                     <div
                       key={idx}
                       className="bg-white/[0.02] border border-white/[0.05] rounded-2xl p-6"
@@ -275,7 +168,7 @@ export default function SponsorshipSection() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                  {terms.map((term, tIdx) => (
+                  {PARTNERSHIP_TERMS.map((term, tIdx) => (
                     <div
                       key={tIdx}
                       className="p-5 bg-black/25 rounded-xl border border-white/[0.04]"

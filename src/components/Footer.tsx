@@ -98,6 +98,7 @@ export default function Footer() {
                             <form
                               id="contact-form"
                               name="wf-form-Contact-form-2"
+                              aria-label="Form"
                               onSubmit={handleFormSubmit}
                               className="message-form w-variant-7fe56b33-fb0b-9458-a747-1b9719c8c1fc"
                             >

@@ -1,6 +1,13 @@
+"use client";
+
 import React from "react";
 
 export default function ProgressiveBlur() {
+  const scrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       <div
@@ -20,6 +27,7 @@ export default function ProgressiveBlur() {
       </div>
       <a
         href="#main"
+        onClick={scrollToTop}
         className="scroll-top w-inline-block sr-only focus:not-sr-only focus:fixed focus:bottom-6 focus:right-6 focus:z-50 focus:bg-white focus:text-[#0f1011] focus:p-3 focus:rounded-full focus:shadow-lg"
       >
         <svg

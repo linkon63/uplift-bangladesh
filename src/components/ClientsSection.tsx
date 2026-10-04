@@ -1,20 +1,6 @@
 import React from "react";
+import { CLIENT_PORTFOLIO } from "@/data";
 
-const clientPortfolio = [
-  { id: "01", code: "BSRM", name: "BSRM", desc: "Infrastructure & Mega-Rebar" },
-  { id: "02", code: "bKash", name: "bKash", desc: "FinTech & Digital Payments" },
-  { id: "03", code: "7 RINGS", name: "Seven Rings Cement", desc: "Heavy Construction Partner" },
-  { id: "04", code: "SHAH", name: "Shah Cement", desc: "National Infrastructure Giant" },
-  { id: "05", code: "BANGLALINK", name: "Banglalink", desc: "Digital Connectivity & Telecom" },
-  { id: "06", code: "AIRTEL", name: "Airtel", desc: "Youth Network & Communication" },
-  { id: "07", code: "SAMSUNG", name: "Samsung", desc: "Consumer Electronics & Innovation" },
-  { id: "08", code: "NESTLE", name: "Nestle", desc: "Nutrition, Health & Wellness" },
-  { id: "09", code: "BBA", name: "Bangladesh Bridge Authority", desc: "Mega-Infrastructure Sponsor" },
-  { id: "10", code: "DNCC", name: "Dhaka North City Corporation", desc: "Smart Urban Governance" },
-  { id: "11", code: "SHELTECH", name: "Sheltech", desc: "Modern Real Estate & Architecture" },
-  { id: "12", code: "RUPAYAN", name: "Rupayan Group", desc: "Mega Townships & Real Estate" },
-  { id: "13", code: "HOLIDAY INN", name: "Holiday Inn", desc: "International Hospitality" },
-];
 
 export default function ClientsSection() {
   return (
@@ -99,7 +85,7 @@ export default function ClientsSection() {
         {/* Marquee Brand Cards (Requirement 14.1, 14.2, 14.3) */}
         <div className="clients_logos">
           <div className="brands_card-group">
-            {clientPortfolio.map((client) => (
+            {CLIENT_PORTFOLIO.map((client) => (
               <div key={client.id} className="clients_brand-card">
                 <div className="clients_card">
                   <div aria-hidden="true" className="clients_number">
@@ -118,7 +104,7 @@ export default function ClientsSection() {
           </div>
 
           <div aria-hidden="true" className="brands_card-group">
-            {clientPortfolio.map((client) => (
+            {CLIENT_PORTFOLIO.map((client) => (
               <div key={`dup-${client.id}`} className="clients_brand-card">
                 <div className="clients_card">
                   <div aria-hidden="true" className="clients_number">
@@ -137,7 +123,7 @@ export default function ClientsSection() {
           </div>
 
           <div aria-hidden="true" className="brands_card-group">
-            {clientPortfolio.map((client) => (
+            {CLIENT_PORTFOLIO.map((client) => (
               <div key={`tri-${client.id}`} className="clients_brand-card">
                 <div className="clients_card">
                   <div aria-hidden="true" className="clients_number">

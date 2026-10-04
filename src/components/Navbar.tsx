@@ -3,12 +3,28 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
+const ROLES = [
+  "Documentary Filmmaker",
+  "Development Content Creator",
+  "Mega-Projects Influencer",
+  "UPLIFT BANGLADESH",
+];
+
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [mobileFocusOpen, setMobileFocusOpen] = useState(false);
   const [desktopServicesOpen, setDesktopServicesOpen] = useState(false);
   const [desktopFocusOpen, setDesktopFocusOpen] = useState(false);
+  const [roleIndex, setRoleIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % ROLES.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
 
   // Lock body scroll when mobile drawer is open & support Escape key
   useEffect(() => {
@@ -66,19 +82,19 @@ export default function Navbar() {
                 </div>
                 <div className="navbar_logo-wrap">
                   <div className="logo-text-flex">
-                    <div className="navbar_logo-anim">
-                      <div aria-hidden="true" className="navbar_logo-anim_text">
-                        Documentary Filmmaker
-                      </div>
-                      <div aria-hidden="true" className="navbar_logo-anim_text is-abs">
-                        Development Content Creator
-                      </div>
-                      <div aria-hidden="true" className="navbar_logo-anim_text is-abs">
-                        Mega-Projects Influencer
-                      </div>
-                      <div aria-hidden="true" className="navbar_logo-anim_text is-abs">
-                        Bangladesh&#x27;s #1 Brand
-                      </div>
+                    <div className="navbar_logo-anim relative overflow-hidden h-[1.3em]">
+                      {ROLES.map((role, idx) => (
+                        <div
+                          key={role}
+                          aria-hidden={idx !== roleIndex}
+                          className={`navbar_logo-anim_text transition-all duration-500 ease-out whitespace-nowrap ${idx === roleIndex
+                              ? "opacity-100 translate-y-0 relative"
+                              : "opacity-0 translate-y-full absolute inset-0 pointer-events-none"
+                            }`}
+                        >
+                          {role}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -113,9 +129,8 @@ export default function Navbar() {
                         width="100%"
                         viewBox="0 0 12 7"
                         fill="none"
-                        className={`dd-icon transition-transform duration-200 ${
-                          desktopServicesOpen ? "rotate-180" : "rotate-0"
-                        }`}
+                        className={`dd-icon transition-transform duration-200 ${desktopServicesOpen ? "rotate-180" : "rotate-0"
+                          }`}
                       >
                         <path
                           d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
@@ -126,11 +141,10 @@ export default function Navbar() {
                       </svg>
                     </div>
                     <nav
-                      className={`dropdown-list w-dropdown-list transition-all duration-200 ${
-                        desktopServicesOpen
+                      className={`dropdown-list w-dropdown-list transition-all duration-200 ${desktopServicesOpen
                           ? "w--open block opacity-100 pointer-events-auto -translate-x-1/2 translate-y-0"
                           : ""
-                      }`}
+                        }`}
                     >
                       <div className="w-dyn-list">
                         <div role="list" className="w-dyn-items">
@@ -210,9 +224,8 @@ export default function Navbar() {
                         width="100%"
                         viewBox="0 0 12 7"
                         fill="none"
-                        className={`dd-icon transition-transform duration-200 ${
-                          desktopFocusOpen ? "rotate-180" : "rotate-0"
-                        }`}
+                        className={`dd-icon transition-transform duration-200 ${desktopFocusOpen ? "rotate-180" : "rotate-0"
+                          }`}
                       >
                         <path
                           d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
@@ -223,11 +236,10 @@ export default function Navbar() {
                       </svg>
                     </div>
                     <nav
-                      className={`dropdown-list w-dropdown-list transition-all duration-200 ${
-                        desktopFocusOpen
+                      className={`dropdown-list w-dropdown-list transition-all duration-200 ${desktopFocusOpen
                           ? "w--open block opacity-100 pointer-events-auto -translate-x-1/2 translate-y-0"
                           : ""
-                      }`}
+                        }`}
                     >
                       <div className="w-dyn-list">
                         <div role="list" className="w-dyn-items">
@@ -464,9 +476,8 @@ export default function Navbar() {
                   <div className="menu_links-wrap">
                     {/* Mobile Services Accordion Dropdown */}
                     <div
-                      className={`dropdown-menu ${
-                        mobileServicesOpen ? "is-open w--open" : ""
-                      }`}
+                      className={`dropdown-menu ${mobileServicesOpen ? "is-open w--open" : ""
+                        }`}
                     >
                       <button
                         type="button"
@@ -482,9 +493,8 @@ export default function Navbar() {
                           height="16"
                           viewBox="0 0 12 7"
                           fill="none"
-                          className={`dd-icon transition-transform duration-200 ${
-                            mobileServicesOpen ? "rotate-180 text-[#EE3028]" : "rotate-0 text-zinc-500"
-                          }`}
+                          className={`dd-icon transition-transform duration-200 ${mobileServicesOpen ? "rotate-180 text-[#EE3028]" : "rotate-0 text-zinc-500"
+                            }`}
                         >
                           <path
                             d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
@@ -497,9 +507,8 @@ export default function Navbar() {
 
                       {/* Expanded Submenu List */}
                       <div
-                        className={`dropdown-list ${
-                          mobileServicesOpen ? "is-open w--open" : ""
-                        }`}
+                        className={`dropdown-list ${mobileServicesOpen ? "is-open w--open" : ""
+                          }`}
                       >
                         <a
                           href="#services"
@@ -541,9 +550,8 @@ export default function Navbar() {
 
                     {/* Mobile Focus Areas Accordion Dropdown */}
                     <div
-                      className={`dropdown-menu ${
-                        mobileFocusOpen ? "is-open w--open" : ""
-                      }`}
+                      className={`dropdown-menu ${mobileFocusOpen ? "is-open w--open" : ""
+                        }`}
                     >
                       <button
                         type="button"
@@ -559,9 +567,8 @@ export default function Navbar() {
                           height="16"
                           viewBox="0 0 12 7"
                           fill="none"
-                          className={`dd-icon transition-transform duration-200 ${
-                            mobileFocusOpen ? "rotate-180 text-[#EE3028]" : "rotate-0 text-zinc-500"
-                          }`}
+                          className={`dd-icon transition-transform duration-200 ${mobileFocusOpen ? "rotate-180 text-[#EE3028]" : "rotate-0 text-zinc-500"
+                            }`}
                         >
                           <path
                             d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
@@ -574,9 +581,8 @@ export default function Navbar() {
 
                       {/* Expanded Submenu List */}
                       <div
-                        className={`dropdown-list ${
-                          mobileFocusOpen ? "is-open w--open" : ""
-                        }`}
+                        className={`dropdown-list ${mobileFocusOpen ? "is-open w--open" : ""
+                          }`}
                       >
                         <a
                           href="#services"

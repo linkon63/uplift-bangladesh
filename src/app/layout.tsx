@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -71,38 +70,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      suppressHydrationWarning
       className="w-mod-js w-mod-ix3"
       data-wf-domain="upliftbangladesh.com"
       data-wf-page="69f9c76e84333229e651e8e2"
       data-wf-site="69f9c76884333229e651e7bc"
     >
-      <body suppressHydrationWarning>
+      <body>
         {children}
-        <Script
-          src="/vendors/jquery/js/jquery-3.5.1.min.dc5e7f18c8.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="/vendors/webflow/gsap/3.15.0/gsap.min.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="/vendors/webflow/gsap/3.15.0/SplitText.min.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="/vendors/webflow/gsap/3.15.0/ScrollTrigger.min.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="https://cdn.prod.website-files.com/69f9c76884333229e651e7bc/js/webflow.870bd618.475ada7d0632014b.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          src="/scripts/cosmos-runtime.js"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );
