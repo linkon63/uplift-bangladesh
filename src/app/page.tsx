@@ -10,7 +10,6 @@ import SponsorshipSection from "@/components/SponsorshipSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
-import ProgressiveBlur from "@/components/ProgressiveBlur";
 import CosmosInteractions from "@/components/CosmosInteractions";
 
 export default function Home() {
@@ -30,7 +29,6 @@ export default function Home() {
         <CtaSection />
       </main>
       <Footer />
-      <ProgressiveBlur />
       <CosmosInteractions />
     </>
   );

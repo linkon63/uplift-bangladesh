@@ -104,7 +104,6 @@ export function DanceVideo() {
           aria-pressed={!isPlaying}
           onClick={togglePlay}
         >
-          {/* Pause Icon (visible when playing) */}
           <span
             data-state="play"
             className="video-button"
@@ -132,7 +131,6 @@ export function DanceVideo() {
             </svg>
           </span>
 
-          {/* Play Icon (visible when paused) */}
           <span
             data-state="pause"
             className="video-button"

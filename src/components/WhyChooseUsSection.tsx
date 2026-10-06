@@ -162,9 +162,6 @@ export default function WhyChooseUsSection() {
                                         <div className="chatanim">
                                             <div data-w-id="bc9f34be-b268-1ee3-d18d-8fa2c3e02cb8"
                                                 className="home-grid_chat">
-                                                <div className="codeblock w-embed w-script">
-                                                    
-                                                </div>
                                                 <div className="home-grid_label">Real-time collaboration</div>
                                                 <div className="home-grid_chat-in">
                                                     <div className="home-grid_chat-group _1"><img loading="lazy"
@@ -177,7 +174,6 @@ export default function WhyChooseUsSection() {
                                                                 </div>
                                                             </div>
                                                             <div className="chat_spacing _2"></div>
-                                                        </div>
                                                     </div>
                                                     <div className="home-grid_chat-group _2">
                                                         <div className="home-grid_chats _2">
@@ -199,10 +195,14 @@ export default function WhyChooseUsSection() {
                                             videoClassName="red-dot_vid"
                                             poster="https://cdn.prod.website-files.com/69f9c76884333229e651e7bc%2F6a2d7cbbf789986bf2972fa2_A%20red%20metallic_poster.0000000.jpg"
                                             src="https://cdn.prod.website-files.com/69f9c76884333229e651e7bc%2F6a2d7cbbf789986bf2972fa2_A%20red%20metallic_mp4.mp4"
+                                            autoPlay={true}
+                                            loop={true}
+                                            muted={true}
                                             lazyLoadMargin="400px 0px"
                                         >
                                             <div className="features_heading">1,000,000+<br />Organic Community</div>
                                         </VideoPlayer>
+                                    </div>
                                     <div id="w-node-_0a62ecc4-5f80-8eb1-4336-7d525cfd03dd-e651e8e2"
                                         className="features_timeline">
                                         <div className="features_timeline-head">

@@ -20,7 +20,7 @@ export function VideoPlayer({
   id,
   src,
   poster,
-  autoPlay = false,
+  autoPlay = true,
   loop = true,
   muted = true,
   containerClassName = "",
@@ -34,25 +34,29 @@ export function VideoPlayer({
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(!lazyLoadMargin);
 
-  // Lazy loading observer if lazyLoadMargin is provided
+  // Ensure DOM muted property is set for reliable autoplay in all browsers
   useEffect(() => {
-    if (!lazyLoadMargin || !containerRef.current) return;
+    if (videoRef.current) {
+      videoRef.current.muted = muted;
+    }
+  }, [muted]);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setIsLoaded(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: lazyLoadMargin }
-    );
+  // Attempt playback on load / mount if autoPlay is enabled
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !isLoaded) return;
 
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, [lazyLoadMargin]);
+    if (autoPlay) {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay was prevented (e.g., waiting for interaction or visibility)
+        });
+      }
+    }
+  }, [isLoaded, autoPlay]);
 
-  // Pause video when scrolled out of viewport
+  // IntersectionObserver to auto-play when in viewport and pause when out of viewport
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -60,16 +64,27 @@ export function VideoPlayer({
       (entries) => {
         const video = videoRef.current;
         if (!video) return;
-        if (!entries[0]?.isIntersecting && !video.paused) {
-          video.pause();
+
+        const entry = entries[0];
+        if (entry?.isIntersecting) {
+          if (lazyLoadMargin && !isLoaded) {
+            setIsLoaded(true);
+          }
+          if (autoPlay) {
+            video.play().catch(() => {});
+          }
+        } else {
+          if (!video.paused) {
+            video.pause();
+          }
         }
       },
-      { threshold: 0 }
+      { threshold: 0.05, rootMargin: lazyLoadMargin || "200px" }
     );
 
     observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, []);
+  }, [autoPlay, isLoaded, lazyLoadMargin]);
 
   const togglePlay = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -117,7 +132,6 @@ export function VideoPlayer({
           aria-pressed={!isPlaying}
           onClick={togglePlay}
         >
-          {/* Pause icon (visible when playing) */}
           <span
             data-state="play"
             className="video-button"
@@ -145,7 +159,6 @@ export function VideoPlayer({
             </svg>
           </span>
 
-          {/* Play icon (visible when paused) */}
           <span
             data-state="pause"
             className="video-button"

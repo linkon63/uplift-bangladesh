@@ -175,7 +175,6 @@ export default function Footer() {
                         className="footer-right"
                       >
                         <div className="footer-grid">
-                          {/* Pages Links (Requirement 11.5) */}
                           <div className="footer_links-group">
                             <div className="text-color-grey-400">
                               <div className="text-size-regular">Pages:</div>
@@ -222,7 +221,6 @@ export default function Footer() {
                             </div>
                           </div>
 
-                          {/* Services Links (Requirement 11.6) */}
                           <div className="footer_links-group">
                             <div className="text-color-grey-400">
                               <div className="text-size-regular">Services:</div>
@@ -269,7 +267,6 @@ export default function Footer() {
                             </div>
                           </div>
 
-                          {/* Contact Links (Requirement 11.7) */}
                           <div className="footer_links-group">
                             <div className="text-color-grey-400">
                               <div className="text-size-regular">Contact:</div>
@@ -320,7 +317,6 @@ export default function Footer() {
                             </div>
                           </div>
 
-                          {/* Headquarters Area (Requirement 11.3 & 11.4) */}
                           <div className="footer_links-group">
                             <div className="text-color-grey-400">
                               <div className="text-size-regular">Headquarters:</div>
@@ -344,7 +340,6 @@ export default function Footer() {
                           </div>
                         </div>
 
-                        {/* Corporate Email with Clickable mailto and Clipboard Copy Trigger (Requirement 11.1 & 11.2) */}
                         <div className="mt-6">
                           <div className="text-color-grey-400">
                             <div className="text-size-regular">Corporate Email:</div>
@@ -397,9 +392,7 @@ export default function Footer() {
                       </div>
                     </div>
 
-                    {/* Timer Cards: 4 Live Timezone Cards (UK London, USA New York, UAE Dubai, Bangladesh Dhaka) */}
                     <div className="footer_content-in is-time">
-                      {/* Card 1: London */}
                       <div data-time="london" className="timer-card">
                         <div className="timer-clock-wrap">
                           <div className="timer-clock-ghost">88:88</div>
@@ -427,7 +420,6 @@ export default function Footer() {
                         </div>
                       </div>
 
-                      {/* Card 2: New York */}
                       <div data-time="newyork" className="timer-card">
                         <div className="timer-clock-wrap">
                           <div className="timer-clock-ghost">88:88</div>
@@ -455,7 +447,6 @@ export default function Footer() {
                         </div>
                       </div>
 
-                      {/* Card 3: Dubai */}
                       <div data-time="dubai" className="timer-card">
                         <div className="timer-clock-wrap">
                           <div className="timer-clock-ghost">88:88</div>
@@ -483,7 +474,6 @@ export default function Footer() {
                         </div>
                       </div>
 
-                      {/* Card 4: Dhaka */}
                       <div data-time="dhaka" className="timer-card">
                         <div className="timer-clock-wrap">
                           <div className="timer-clock-ghost">88:88</div>
@@ -512,7 +502,6 @@ export default function Footer() {
                       </div>
                     </div>
 
-                    {/* Tagline: Rise • Focus • Dominate • Documenting Progress. Building Trust. Inspiring a Nation. */}
                     <div className="footer_motto-wrap">
                       <div className="footer_motto-inner">
                         <span className="footer_motto-highlight">Rise • Focus • Dominate</span>
@@ -521,7 +510,6 @@ export default function Footer() {
                       </div>
                     </div>
 
-                    {/* Colossal Edge-to-Edge Wordmark (matching reference image COSMOS STUDIO style) */}
                     <div className="footer_wordmark-wrap">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -547,7 +535,6 @@ export default function Footer() {
                     </div>
                   </div>
 
-                  {/* Legal and Copyright Area with Scroll-To-Top (Matches Reference Image) */}
                   <div className="footer_legal-wrap">
                     <div className="footer_copyright">
                       © 2026 Uplift Bangladesh™

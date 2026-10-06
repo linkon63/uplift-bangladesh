@@ -17,7 +17,6 @@ export default function ServicesSection() {
             <div className="container-medium">
               <div className="home-services_head">
                 <div className="home-services_icons">
-                  {/* Decorative cross icons */}
                   {["tl", "tr", "bl", "br"].map((pos) => (
                     <img
                       key={pos}
@@ -38,7 +37,6 @@ export default function ServicesSection() {
                     Production services and key focus areas of Uplift Bangladesh
                   </h2>
 
-                  {/* Tab switcher — matching cosmos.studio tabs */}
                   <div
                     data-current={activeTab}
                     data-easing="ease"
@@ -90,7 +88,6 @@ export default function ServicesSection() {
                     </div>
 
                     <div className="tabs-content w-tab-content">
-                      {/* Tab 1 — Services */}
                       <div
                         id="pane-services"
                         role="tabpanel"
@@ -112,7 +109,6 @@ export default function ServicesSection() {
                         </div>
                       </div>
 
-                      {/* Tab 2 — Focus Areas */}
                       <div
                         id="pane-focus"
                         role="tabpanel"

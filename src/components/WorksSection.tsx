@@ -4,7 +4,6 @@ import { WORKS_PROJECTS } from "@/data";
 export default function WorksSection() {
   return (
     <section id="works" className="section_works">
-      {/* ── Section header */}
       <div className="padding-global">
         <div className="container-xxsmall">
           <div className="works_head">
@@ -23,7 +22,6 @@ export default function WorksSection() {
 
       <div className="spacer-large show-tablet"></div>
 
-      {/* ── Project cards list */}
       <div className="padding-global is-tiny">
         <div className="container-large">
           <div className="works_wrapper w-dyn-list">
@@ -43,7 +41,6 @@ export default function WorksSection() {
                       className="works_card w-inline-block"
                       aria-label={`Watch documentary: ${project.name}`}
                     >
-                      {/* Floating label */}
                       <div className="works_label">
                         <div className="about_label-infos">
                           <img
@@ -58,7 +55,6 @@ export default function WorksSection() {
                         <div className="text-size-tiny text-color-white">Watch Documentary</div>
                       </div>
 
-                      {/* Full-width project image */}
                       <img
                         loading={idx === 0 ? "eager" : "lazy"}
                         src={project.image}
@@ -67,7 +63,6 @@ export default function WorksSection() {
                       />
                     </a>
 
-                    {/* Meta info row */}
                     <div className="works_infos">
                       <div className="works_infos-group">
                         <div className="text-color-grey-400">
@@ -90,7 +85,6 @@ export default function WorksSection() {
         </div>
       </div>
 
-      {/* ── "View All" CTA button */}
       <div className="button-center">
         <a
           data-wf--button--variant="medium-light"

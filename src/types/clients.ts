@@ -3,4 +3,5 @@ export interface ClientItem {
   code: string;
   name: string;
   desc: string;
+  image?: string;
 }

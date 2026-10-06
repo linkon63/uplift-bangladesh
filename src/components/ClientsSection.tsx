@@ -1,6 +1,6 @@
 import React from "react";
+import Image from "next/image";
 import { CLIENT_PORTFOLIO } from "@/data";
-
 
 export default function ClientsSection() {
   return (
@@ -82,7 +82,6 @@ export default function ClientsSection() {
           </div>
         </div>
 
-        {/* Marquee Brand Cards (Requirement 14.1, 14.2, 14.3) */}
         <div className="clients_logos">
           <div className="brands_card-group">
             {CLIENT_PORTFOLIO.map((client) => (
@@ -91,9 +90,22 @@ export default function ClientsSection() {
                   <div aria-hidden="true" className="clients_number">
                     ({client.id})
                   </div>
-                  <div className="text-base font-extrabold tracking-wide text-brand-dark">
-                    {client.code}
-                  </div>
+                  {client.image ? (
+                    <div className="clients_logo-box">
+                      <Image
+                        src={client.image}
+                        alt={`${client.name} logo`}
+                        width={140}
+                        height={58}
+                        className="clients_brand-logo-img"
+                        style={{ objectFit: "contain" }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="text-base font-extrabold tracking-wide text-brand-dark">
+                      {client.code}
+                    </div>
+                  )}
                 </div>
                 <div className="clients_texts">
                   <div className="clients_name">{client.name}</div>
@@ -110,9 +122,22 @@ export default function ClientsSection() {
                   <div aria-hidden="true" className="clients_number">
                     ({client.id})
                   </div>
-                  <div className="text-base font-extrabold tracking-wide text-brand-dark">
-                    {client.code}
-                  </div>
+                  {client.image ? (
+                    <div className="clients_logo-box">
+                      <Image
+                        src={client.image}
+                        alt={`${client.name} logo`}
+                        width={140}
+                        height={58}
+                        className="clients_brand-logo-img"
+                        style={{ objectFit: "contain" }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="text-base font-extrabold tracking-wide text-brand-dark">
+                      {client.code}
+                    </div>
+                  )}
                 </div>
                 <div className="clients_texts">
                   <div className="clients_name">{client.name}</div>
@@ -129,9 +154,22 @@ export default function ClientsSection() {
                   <div aria-hidden="true" className="clients_number">
                     ({client.id})
                   </div>
-                  <div className="text-base font-extrabold tracking-wide text-brand-dark">
-                    {client.code}
-                  </div>
+                  {client.image ? (
+                    <div className="clients_logo-box">
+                      <Image
+                        src={client.image}
+                        alt={`${client.name} logo`}
+                        width={140}
+                        height={58}
+                        className="clients_brand-logo-img"
+                        style={{ objectFit: "contain" }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="text-base font-extrabold tracking-wide text-brand-dark">
+                      {client.code}
+                    </div>
+                  )}
                 </div>
                 <div className="clients_texts">
                   <div className="clients_name">{client.name}</div>
@@ -146,3 +184,4 @@ export default function ClientsSection() {
     </>
   );
 }
+

@@ -25,8 +25,6 @@ export default function Navbar() {
     return () => clearInterval(timer);
   }, []);
 
-
-  // Lock body scroll when mobile drawer is open & support Escape key
   useEffect(() => {
     if (typeof document !== "undefined") {
       document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
@@ -65,7 +63,6 @@ export default function Navbar() {
         <div className="navbar_content">
           <div animation="navbar-content" className="padding-global is-tiny">
             <div className="navbar_component">
-              {/* Brand Logo & Animated Roles */}
               <Link
                 aria-label="Uplift Bangladesh — home"
                 href="/"
@@ -100,10 +97,8 @@ export default function Navbar() {
                 </div>
               </Link>
 
-              {/* Desktop Nav Links */}
               <div className="navbar_links">
                 <div className="navbar_links-wrap">
-                  {/* Desktop Services Dropdown */}
                   <div
                     className={`w-dropdown ${desktopServicesOpen ? "w--open" : ""}`}
                     onMouseEnter={() => setDesktopServicesOpen(true)}
@@ -198,7 +193,6 @@ export default function Navbar() {
                     </nav>
                   </div>
 
-                  {/* Desktop Focus Areas Dropdown */}
                   <div
                     className={`w-dropdown ${desktopFocusOpen ? "w--open" : ""}`}
                     onMouseEnter={() => setDesktopFocusOpen(true)}
@@ -306,7 +300,6 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Navbar Right: Phone contact, Mobile Menu Toggle Button, Partner CTA */}
               <div className="navbar_contact">
                 <div className="navbar-contact">
                   <div data-wf--talk-to--variant="base">
@@ -328,7 +321,6 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                {/* Mobile Hamburger / Cross Toggle Button */}
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -385,7 +377,6 @@ export default function Navbar() {
                   )}
                 </button>
 
-                {/* Desktop Partner CTA */}
                 <div>
                   <a
                     data-wf--button--variant="small-light"
@@ -407,14 +398,12 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Backdrop Overlay (Clicking dark area outside drawer closes it) */}
         <div
           className={`menu_bg ${mobileMenuOpen ? "is-open" : ""}`}
           onClick={closeMobileMenu}
           aria-hidden="true"
         />
 
-        {/* Mobile Navigation Drawer Modal */}
         <div
           id="mobile-menu"
           className={`menu ${mobileMenuOpen ? "is-open" : ""}`}
@@ -422,14 +411,12 @@ export default function Navbar() {
           aria-modal="true"
           aria-label="Mobile Navigation"
           onClick={(e) => {
-            // Close if clicking the backdrop area outside the card
             if (e.target === e.currentTarget) {
               closeMobileMenu();
             }
           }}
         >
           <div className="menu_content" onClick={(e) => e.stopPropagation()}>
-            {/* Drawer Header: Brand Logo on Left, High-Contrast Cross Close Button on Right */}
             <div className="menu_drawer-header">
               <Link
                 href="/"
@@ -445,7 +432,6 @@ export default function Navbar() {
                 />
               </Link>
 
-              {/* Dedicated Cross (X) Close Button */}
               <button
                 type="button"
                 onClick={closeMobileMenu}
@@ -469,12 +455,10 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Drawer Body Items */}
             <div className="menu_items">
               <div className="menu_links">
                 <div className="menu_col-1">
                   <div className="menu_links-wrap">
-                    {/* Mobile Services Accordion Dropdown */}
                     <div
                       className={`dropdown-menu ${mobileServicesOpen ? "is-open w--open" : ""
                         }`}
@@ -505,7 +489,6 @@ export default function Navbar() {
                         </svg>
                       </button>
 
-                      {/* Expanded Submenu List */}
                       <div
                         className={`dropdown-list ${mobileServicesOpen ? "is-open w--open" : ""
                           }`}
@@ -548,7 +531,6 @@ export default function Navbar() {
                       </div>
                     </div>
 
-                    {/* Mobile Focus Areas Accordion Dropdown */}
                     <div
                       className={`dropdown-menu ${mobileFocusOpen ? "is-open w--open" : ""
                         }`}
@@ -579,7 +561,6 @@ export default function Navbar() {
                         </svg>
                       </button>
 
-                      {/* Expanded Submenu List */}
                       <div
                         className={`dropdown-list ${mobileFocusOpen ? "is-open w--open" : ""
                           }`}
@@ -615,7 +596,6 @@ export default function Navbar() {
                       </div>
                     </div>
 
-                    {/* Direct Navigation Links */}
                     <a
                       href="#works"
                       onClick={closeMobileMenu}
@@ -633,7 +613,6 @@ export default function Navbar() {
                     </a>
                   </div>
 
-                  {/* Mobile Contact & Direct Action in Drawer */}
                   <div data-wf--talk-to--variant="base">
                     <div className="navbar_talk-to_wr">
                       <a
@@ -673,7 +652,6 @@ export default function Navbar() {
                     </div>
                   </div>
 
-                  {/* Social and Community Links */}
                   <div className="menu_legal">
                     <div className="menu_legal-links">
                       <a

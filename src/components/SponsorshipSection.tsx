@@ -10,7 +10,6 @@ export default function SponsorshipSection() {
           <div className="padding-section-medium is-mobile-xsmall"></div>
           <div className="padding-global">
             <div className="container-large">
-              {/* Section Header */}
               <div className="text-align-center max-w-[860px] mx-auto">
                 <div className="text-color-grey-250">
                   <div className="text-style-label-caption center">Partnership &amp; Sponsorship</div>
@@ -27,7 +26,6 @@ export default function SponsorshipSection() {
 
               <div className="spacer-xlarge"></div>
 
-              {/* Pricing Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {SPONSORSHIP_PACKAGES.map((pkg, i) => (
                   <div
@@ -124,7 +122,6 @@ export default function SponsorshipSection() {
 
               <div className="spacer-xlarge"></div>
 
-              {/* Key Benefits Grid */}
               <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6 sm:p-10 md:p-12">
                 <div className="text-align-center max-w-[700px] mx-auto mb-9">
                   <div className="text-color-grey-250">
@@ -158,7 +155,6 @@ export default function SponsorshipSection() {
 
               <div className="spacer-large"></div>
 
-              {/* Terms & Policies Section */}
               <div className="bg-white/[0.02] border border-white/[0.06] rounded-3xl p-6 sm:p-9">
                 <div className="mb-7">
                   <div className="text-style-label-caption text-[#EE3028]">Governance &amp; Transparency</div>

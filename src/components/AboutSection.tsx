@@ -29,9 +29,7 @@ export default function AboutSection() {
                   <div className="spacer-medium"></div>
                 </div>
 
-                {/* 2 About Items in exact order (Requirement 7 Criterion 4) */}
                 <div className="about_items">
-                  {/* Item 1: Bangladesh Based */}
                   <div className="about_item">
                     <div
                       className="about_lottie"
@@ -59,7 +57,6 @@ export default function AboutSection() {
                     </div>
                   </div>
 
-                  {/* Item 2: Mission-driven storytelling */}
                   <div className="about_item">
                     <div
                       className="about_lottie big"
@@ -89,7 +86,6 @@ export default function AboutSection() {
                 </div>
               </div>
 
-              {/* Team Grid (Requirement 7 Criteria 5, 6, 7) */}
               <div
                 id="w-node-_4c18b827-b20c-1e1d-1997-95cc5621e944-5621e91f"
                 data-w-id="4c18b827-b20c-1e1d-1997-95cc5621e944"

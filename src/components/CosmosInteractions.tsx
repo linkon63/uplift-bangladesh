@@ -124,7 +124,121 @@ export default function CosmosInteractions() {
     };
     window.addEventListener("scroll", handleNavScroll, { passive: true });
 
-    // ── 3. CHAT ANIMATION IN WHY CHOOSE US
+    // ── 3. KINETIC TEXT & SECTION STAGGER REVEAL (Cosmos Reveal Engine)
+    const revealTargets = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        "h1, h2, h3, .text-style-label-caption, .home-services_item, .pricing_plan, .features_sync, .features_timeline, .testimonials_blockquote"
+      )
+    );
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-revealed");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+
+    revealTargets.forEach((target, i) => {
+      if (!target.classList.contains("cosmos-reveal")) {
+        target.classList.add("cosmos-reveal");
+        // Stagger siblings slightly
+        const staggerClass = `cosmos-stagger-${(i % 5) + 1}`;
+        target.classList.add(staggerClass);
+      }
+      revealObserver.observe(target);
+    });
+
+    // ── 4. INTERACTIVE 3D TILT & SPECULAR CURSOR LIGHT (Cosmos Card Physics)
+    const tiltCards = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        ".home-services_item, .pricing_plan, .features_sync, .home-grid_chat, .red-dot"
+      )
+    );
+
+    const cleanupTiltList: Array<() => void> = [];
+
+    if (window.innerWidth >= 992) {
+      tiltCards.forEach((card) => {
+        card.classList.add("cosmos-tilt-card");
+
+        // Inject glow overlay if not present
+        if (!card.querySelector(".cosmos-glow-overlay")) {
+          const glow = document.createElement("div");
+          glow.className = "cosmos-glow-overlay";
+          card.appendChild(glow);
+        }
+
+        const onMouseMove = (e: MouseEvent) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+
+          const rotateX = ((y - centerY) / centerY) * -5;
+          const rotateY = ((x - centerX) / centerX) * 5;
+
+          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-3px)`;
+          card.style.setProperty("--glow-x", `${x}px`);
+          card.style.setProperty("--glow-y", `${y}px`);
+        };
+
+        const onMouseLeave = () => {
+          card.style.transform = "";
+          card.style.removeProperty("--glow-x");
+          card.style.removeProperty("--glow-y");
+        };
+
+        card.addEventListener("mousemove", onMouseMove);
+        card.addEventListener("mouseleave", onMouseLeave);
+
+        cleanupTiltList.push(() => {
+          card.removeEventListener("mousemove", onMouseMove);
+          card.removeEventListener("mouseleave", onMouseLeave);
+        });
+      });
+    }
+
+    // ── 5. MAGNETIC ATTRACTION ON BUTTONS & PILLS
+    const magneticElements = Array.from(
+      document.querySelectorAll<HTMLElement>(".button, .tab-link, .navbar_talk-to, .play-pause")
+    );
+    const cleanupMagneticList: Array<() => void> = [];
+
+    if (window.innerWidth >= 992) {
+      magneticElements.forEach((el) => {
+        el.classList.add("cosmos-magnetic");
+
+        const onMouseMove = (e: MouseEvent) => {
+          const rect = el.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const distanceX = e.clientX - centerX;
+          const distanceY = e.clientY - centerY;
+
+          el.style.transform = `translate(${distanceX * 0.2}px, ${distanceY * 0.2}px)`;
+        };
+
+        const onMouseLeave = () => {
+          el.style.transform = "";
+        };
+
+        el.addEventListener("mousemove", onMouseMove);
+        el.addEventListener("mouseleave", onMouseLeave);
+
+        cleanupMagneticList.push(() => {
+          el.removeEventListener("mousemove", onMouseMove);
+          el.removeEventListener("mouseleave", onMouseLeave);
+        });
+      });
+    }
+
+    // ── 6. CHAT ANIMATION IN WHY CHOOSE US
     let chatObserver: IntersectionObserver | null = null;
     const chatContainer = document.querySelector(".home-grid_chat") as HTMLElement | null;
     if (chatContainer) {
@@ -169,7 +283,7 @@ export default function CosmosInteractions() {
       }
     }
 
-    // ── 4. LOTTIE ANIMATIONS LOADER
+    // ── 7. LOTTIE ANIMATIONS LOADER
     const loadLotties = () => {
       const lottieElements = document.querySelectorAll('[data-animation-type="lottie"]');
       if (!lottieElements.length) return;
@@ -224,6 +338,9 @@ export default function CosmosInteractions() {
       if (worksRafId !== null) cancelAnimationFrame(worksRafId);
       window.removeEventListener("scroll", handleNavScroll);
       if (chatObserver) chatObserver.disconnect();
+      revealObserver.disconnect();
+      cleanupTiltList.forEach((fn) => fn());
+      cleanupMagneticList.forEach((fn) => fn());
     };
   }, []);
 

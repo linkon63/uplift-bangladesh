@@ -93,7 +93,6 @@ export default function TestimonialsSection() {
             <div className="spacer-xlarge is-mobile-large"></div>
             <div className="testimonials_numbers w-full">
               <div className="testimonials_numbers-main grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-start w-full pt-3">
-                {/* Stat 1: 451,000+ */}
                 <div className="number_block flex flex-col gap-2">
                   <div className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-none text-[#0f1011] whitespace-nowrap">
                     <AnimatedCounter
@@ -108,7 +107,6 @@ export default function TestimonialsSection() {
                   </p>
                 </div>
 
-                {/* Stat 2: 681,000+ */}
                 <div className="number_block flex flex-col gap-2">
                   <div className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-none text-[#0f1011] whitespace-nowrap">
                     <AnimatedCounter
@@ -123,7 +121,6 @@ export default function TestimonialsSection() {
                   </p>
                 </div>
 
-                {/* Stat 3: 30+ */}
                 <div className="number_block flex flex-col gap-2">
                   <div className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-none text-[#0f1011] whitespace-nowrap">
                     <AnimatedCounter
