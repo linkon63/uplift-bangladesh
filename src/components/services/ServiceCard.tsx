@@ -65,9 +65,9 @@ export function ServiceCard({ item }: ServiceCardProps) {
             <a
               data-wf--button--variant="medium-light"
               href={item.cta}
-              className="button w-variant-9cb96ae5-a355-784d-c2ef-0196f705ac57 w-inline-block"
+              className="button w-variant-9cb96ae5-a355-784d-c2ef-0196f705ac57 w-inline-block w-full text-center"
             >
-              <div className="button-in w-variant-9cb96ae5-a355-784d-c2ef-0196f705ac57">
+              <div className="button-in w-variant-9cb96ae5-a355-784d-c2ef-0196f705ac57 justify-center">
                 <div className="button_texts w-variant-9cb96ae5-a355-784d-c2ef-0196f705ac57">
                   <div className="button_text w-variant-9cb96ae5-a355-784d-c2ef-0196f705ac57 _1">
                     {item.ctaLabel}

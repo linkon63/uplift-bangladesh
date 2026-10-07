@@ -14,25 +14,32 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Uplift Bangladesh | International Documentary Filmmaker & Development Media",
     description:
-      "Bangladesh's Best Development Content Creator. Documenting progress, infrastructure, mega-projects, innovation, and shaping global perception.",
-    url: "https://www.youtube.com/@UpliftBangladesh",
+      "Bangladesh's leading development-focused media and documentary platform. Documenting progress, infrastructure, mega-projects, innovation, and shaping global perception.",
+    url: "https://upliftbangladesh.com",
     siteName: "Uplift Bangladesh",
+    locale: "en_US",
+    type: "website",
     images: [
       {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Uplift Bangladesh Logo & Media Platform",
+      },
+      {
         url: "/assets/img/logo/logo.png",
-        width: 1000,
-        height: 1000,
-        alt: "Uplift Bangladesh",
+        width: 800,
+        height: 800,
+        alt: "Uplift Bangladesh Logo",
       },
     ],
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Uplift Bangladesh | International Documentary Filmmaker",
     description:
       "Bangladesh's Best Development Content Creator. Inspiring Bangladesh, shaping global perception, and empowering national progress.",
-    images: ["/assets/img/logo/logo.png"],
+    images: ["/og-image.png"],
   },
   icons: {
     icon: [

@@ -30,7 +30,7 @@ export default function SponsorshipSection() {
                 {SPONSORSHIP_PACKAGES.map((pkg, i) => (
                   <div
                     key={i}
-                    className={`rounded-[20px] p-8 sm:p-6 flex flex-col justify-between relative backdrop-blur-xl transition-all duration-300 ${
+                    className={`rounded-[20px] p-5 sm:p-6 flex flex-col justify-between relative backdrop-blur-xl transition-all duration-300 ${
                       pkg.highlight
                         ? "bg-gradient-to-b from-[#EE3028]/[0.12] to-[#14141a]/80 border border-[#EE3028]/45 shadow-[0_8px_32px_rgba(238,48,40,0.18)]"
                         : "bg-white/[0.03] border border-white/[0.08] hover:border-white/20"

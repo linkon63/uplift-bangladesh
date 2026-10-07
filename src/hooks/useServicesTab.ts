@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { ServicesTabType } from "@/types";
 import { SERVICES_DATA, FOCUS_AREAS_DATA } from "@/data";
 
@@ -15,6 +15,17 @@ export function useServicesTab(initialTab: ServicesTabType = "Tab 1") {
     (tab: ServicesTabType) => activeTab === tab,
     [activeTab]
   );
+
+  useEffect(() => {
+    const handleSelectTab = (e: Event) => {
+      const customEvent = e as CustomEvent<ServicesTabType>;
+      if (customEvent.detail) {
+        setActiveTab(customEvent.detail);
+      }
+    };
+    window.addEventListener("selectServicesTab", handleSelectTab);
+    return () => window.removeEventListener("selectServicesTab", handleSelectTab);
+  }, []);
 
   return {
     activeTab,

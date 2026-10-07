@@ -20,9 +20,9 @@ export const WORKS_PROJECTS: WorkProject[] = [
     sector: "Urban Planning & Modern Mobility",
     href: "https://www.youtube.com/@UpliftBangladesh",
     thumbnail:
-      "https://cdn.prod.website-files.com/69f9c76f84333229e651e903/6a918d963853166aa90570c3_Group%201400.webp",
+      "https://cdn.prod.website-files.com/69f9c76f84333229e651e903/6a9189a08805fd2c259fee18_Cover6-p-1600.webp",
     image:
-      "https://cdn.prod.website-files.com/69f9c76f84333229e651e903/6a918d963853166aa90570c3_Group%201400.webp",
+      "https://cdn.prod.website-files.com/69f9c76f84333229e651e903/6a9189a08805fd2c259fee18_Cover6-p-1600.webp",
     alt: "Dhaka Metro Rail MRT-6",
   },
   {

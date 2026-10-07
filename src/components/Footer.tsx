@@ -74,6 +74,40 @@ export default function Footer() {
     setFormSubmitted(true);
   };
 
+  const handleFooterNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+    tab?: "Tab 1" | "Tab 2"
+  ) => {
+    e.preventDefault();
+    if (tab && typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("selectServicesTab", { detail: tab })
+      );
+    }
+    if (typeof window !== "undefined") {
+      if (href === "#home" || href === "#top" || href === "/") {
+        if (window.location.pathname === "/") {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          window.location.href = "/";
+        }
+        return;
+      }
+      if (href.startsWith("#")) {
+        const el = document.querySelector(href);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        } else {
+          window.location.href = `/${href}`;
+          return;
+        }
+      }
+      window.location.href = href;
+    }
+  };
+
   return (
     <>
       <footer id="contact" className="section">
@@ -183,6 +217,7 @@ export default function Footer() {
                               <div className="footer_links-list">
                                 <a
                                   href="#home"
+                                  onClick={(e) => handleFooterNavClick(e, "#home")}
                                   className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
@@ -195,6 +230,7 @@ export default function Footer() {
                                 </a>
                                 <a
                                   href="#works"
+                                  onClick={(e) => handleFooterNavClick(e, "#works")}
                                   className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
@@ -207,6 +243,7 @@ export default function Footer() {
                                 </a>
                                 <a
                                   href="#sponsorship"
+                                  onClick={(e) => handleFooterNavClick(e, "#sponsorship")}
                                   className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
@@ -229,6 +266,7 @@ export default function Footer() {
                               <div className="footer_links-list">
                                 <a
                                   href="#services"
+                                  onClick={(e) => handleFooterNavClick(e, "#services", "Tab 1")}
                                   className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
@@ -241,6 +279,7 @@ export default function Footer() {
                                 </a>
                                 <a
                                   href="#services"
+                                  onClick={(e) => handleFooterNavClick(e, "#services", "Tab 1")}
                                   className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
@@ -253,6 +292,7 @@ export default function Footer() {
                                 </a>
                                 <a
                                   href="#services"
+                                  onClick={(e) => handleFooterNavClick(e, "#services", "Tab 1")}
                                   className="footer_menu-link w-inline-block"
                                 >
                                   <div className="footer_link-texts">
@@ -361,7 +401,7 @@ export default function Footer() {
                               type="button"
                               onClick={handleCopyEmail}
                               aria-label="Copy email address"
-                              className={copied ? "footer_copy-btn is-copied" : "footer_copy-btn"}
+                              className={`cursor-pointer ${copied ? "footer_copy-btn is-copied" : "footer_copy-btn"}`}
                             >
                               {copied ? (
                                 <>
@@ -536,14 +576,46 @@ export default function Footer() {
                   </div>
 
                   <div className="footer_legal-wrap">
-                    <div className="footer_copyright">
-                      © 2026 Uplift Bangladesh™
+                    <div className="footer_copyright-group flex items-center gap-2 sm:gap-3 flex-wrap">
+                      <div className="footer_copyright">
+                        © 2026 Uplift Bangladesh™
+                      </div>
+                      <span className="text-zinc-300 hidden sm:inline" aria-hidden="true">•</span>
+                      <div className="footer_powered text-zinc-500 text-sm">
+                        Powered by{" "}
+                        <a
+                          href="https://www.softzino.com/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold text-zinc-800 hover:text-[#EE3028] transition-colors underline-offset-2 hover:underline cursor-pointer"
+                        >
+                          Softzino Technologies
+                        </a>
+                      </div>
                     </div>
                     <div className="footer_legal-right">
-                      <Link href="/legal/privacy-policy" className="footer_legal-link">
+                      <Link
+                        href="/legal/privacy-policy"
+                        scroll={true}
+                        onClick={() => {
+                          if (typeof window !== "undefined") {
+                            window.scrollTo({ top: 0, behavior: "instant" });
+                          }
+                        }}
+                        className="footer_legal-link cursor-pointer"
+                      >
                         Privacy Policy
                       </Link>
-                      <Link href="/legal/terms-of-use" className="footer_legal-link">
+                      <Link
+                        href="/legal/terms-of-use"
+                        scroll={true}
+                        onClick={() => {
+                          if (typeof window !== "undefined") {
+                            window.scrollTo({ top: 0, behavior: "instant" });
+                          }
+                        }}
+                        className="footer_legal-link cursor-pointer"
+                      >
                         Terms of use
                       </Link>
                       <button
@@ -554,7 +626,7 @@ export default function Footer() {
                           }
                         }}
                         aria-label="Scroll to top"
-                        className="footer_scroll-top-btn"
+                        className="footer_scroll-top-btn cursor-pointer"
                         title="Scroll to top"
                       >
                         <svg

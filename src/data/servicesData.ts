@@ -87,7 +87,7 @@ export const SERVICES_DATA: ServiceItem[] = [
     description:
       "We translate development initiatives, investments and public-impact projects into clear, engaging visual stories for national and international audiences.",
     image:
-      "https://cdn.prod.website-files.com/69f9c76f84333229e651e903/6a918d963853166aa90570c3_Group%201400.webp",
+      "https://cdn.prod.website-files.com/69f9c76f84333229e651e903/6a9189a08805fd2c259fee18_Cover6-p-1600.webp",
     cta: "#contact",
     ctaLabel: "Enquire Now",
   },
@@ -239,7 +239,7 @@ export const FOCUS_AREAS_DATA: ServiceItem[] = [
     description:
       "Commercial buildings, residential developments, smart cities, landmarks and urban transformation.",
     image:
-      "https://cdn.prod.website-files.com/69f9c76f84333229e651e903/6a918d963853166aa90570c3_Group%201400.webp",
+      "https://cdn.prod.website-files.com/69f9c76f84333229e651e903/6a955958e3b107ca50cf90e2_Cover%20(13).webp",
     cta: "#contact",
     ctaLabel: "Learn More",
   },

@@ -127,7 +127,7 @@ export default function CosmosInteractions() {
     // ── 3. KINETIC TEXT & SECTION STAGGER REVEAL (Cosmos Reveal Engine)
     const revealTargets = Array.from(
       document.querySelectorAll<HTMLElement>(
-        "h1, h2, h3, .text-style-label-caption, .home-services_item, .pricing_plan, .features_sync, .features_timeline, .testimonials_blockquote"
+        "h1:not(.hero_title), h2, h3, .text-style-label-caption, .home-services_item, .pricing_plan, .features_sync, .features_timeline, .testimonials_blockquote"
       )
     );
 

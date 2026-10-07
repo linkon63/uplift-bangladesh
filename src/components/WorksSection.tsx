@@ -63,7 +63,22 @@ export default function WorksSection() {
                       />
                     </a>
 
-                    <div className="works_infos">
+                    {/* Mobile & Tablet Metadata Row */}
+                    <div className="lg:hidden flex flex-col gap-1 mt-3 px-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <h3 className="text-sm font-bold text-zinc-900 leading-snug">
+                          {project.name}
+                        </h3>
+                        <span className="text-[11px] font-mono font-bold text-[#EE3028] bg-[#EE3028]/10 px-2 py-0.5 rounded-full shrink-0">
+                          {project.year}
+                        </span>
+                      </div>
+                      <p className="text-xs text-zinc-500 font-medium m-0">
+                        {project.sector}
+                      </p>
+                    </div>
+
+                    <div className="works_infos hidden lg:flex">
                       <div className="works_infos-group">
                         <div className="text-color-grey-400">
                           <div {...{ animation: "year-1" }} className="text-style-label-caption">Year</div>
