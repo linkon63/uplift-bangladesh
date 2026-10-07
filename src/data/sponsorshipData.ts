@@ -6,8 +6,8 @@ export const SPONSORSHIP_PACKAGES: SponsorshipPackage[] = [
     badge: "Flagship Long-Form",
     deliverable: "Long-Form Sponsored Documentary Videos",
     quantity: "08 - 10 Videos / month",
-    investment: "৳ 15,000",
-    rateNote: "per content",
+    investment: "Custom Quote",
+    rateNote: "Tailored to campaign scale & deliverables",
     highlight: true,
     features: [
       "In-depth cinematic feature & site walkthrough",
@@ -21,8 +21,8 @@ export const SPONSORSHIP_PACKAGES: SponsorshipPackage[] = [
     badge: "High-Engagement Viral Reach",
     deliverable: "Sponsored Short Video Reels",
     quantity: "30 - 40 Reels / month",
-    investment: "৳ 5,000",
-    rateNote: "per content (Min. 5 content)",
+    investment: "Custom Quote",
+    rateNote: "Based on monthly content frequency",
     highlight: false,
     features: [
       "Fast-paced, mobile-optimized vertical video",
@@ -33,11 +33,11 @@ export const SPONSORSHIP_PACKAGES: SponsorshipPackage[] = [
   },
   {
     platform: "Instagram",
-    badge: "Complimentary Bonus",
+    badge: "Syndicated Reach",
     deliverable: "Sponsored Short Video Reels",
     quantity: "30 - 40 Reels / month",
-    investment: "COMPLIMENTARY",
-    rateNote: "For contracted annual partners",
+    investment: "Custom Quote",
+    rateNote: "Bundled with annual brand partnerships",
     highlight: false,
     features: [
       "Cross-posted high-aesthetic visual reels",
@@ -48,11 +48,11 @@ export const SPONSORSHIP_PACKAGES: SponsorshipPackage[] = [
   },
   {
     platform: "TikTok",
-    badge: "Complimentary Bonus",
+    badge: "Youth Amplification",
     deliverable: "Sponsored Short Video Reels",
     quantity: "10 - 15 Reels / month",
-    investment: "COMPLIMENTARY",
-    rateNote: "For contracted annual partners",
+    investment: "Custom Quote",
+    rateNote: "Bundled with annual brand partnerships",
     highlight: false,
     features: [
       "Gen-Z & broad national demographic amplification",
