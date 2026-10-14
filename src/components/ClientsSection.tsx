@@ -1,8 +1,15 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import { CLIENT_PORTFOLIO } from "@/data";
 
 export default function ClientsSection() {
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+
+  const handleImageError = (clientId: string) => {
+    setFailedImages((current) => ({ ...current, [clientId]: true }));
+  };
   return (
     <>
       <section className="section_clients">
@@ -90,7 +97,7 @@ export default function ClientsSection() {
                   <div aria-hidden="true" className="clients_number">
                     ({client.id})
                   </div>
-                  {client.image ? (
+                  {client.image && !failedImages[client.id] ? (
                     <div className="clients_logo-box">
                       <Image
                         src={client.image}
@@ -99,6 +106,7 @@ export default function ClientsSection() {
                         height={58}
                         className="clients_brand-logo-img"
                         style={{ objectFit: "contain" }}
+                        onError={() => handleImageError(client.id)}
                       />
                     </div>
                   ) : (
@@ -122,7 +130,7 @@ export default function ClientsSection() {
                   <div aria-hidden="true" className="clients_number">
                     ({client.id})
                   </div>
-                  {client.image ? (
+                  {client.image && !failedImages[client.id] ? (
                     <div className="clients_logo-box">
                       <Image
                         src={client.image}
@@ -131,6 +139,7 @@ export default function ClientsSection() {
                         height={58}
                         className="clients_brand-logo-img"
                         style={{ objectFit: "contain" }}
+                        onError={() => handleImageError(client.id)}
                       />
                     </div>
                   ) : (
@@ -154,7 +163,7 @@ export default function ClientsSection() {
                   <div aria-hidden="true" className="clients_number">
                     ({client.id})
                   </div>
-                  {client.image ? (
+                  {client.image && !failedImages[client.id] ? (
                     <div className="clients_logo-box">
                       <Image
                         src={client.image}
@@ -163,6 +172,7 @@ export default function ClientsSection() {
                         height={58}
                         className="clients_brand-logo-img"
                         style={{ objectFit: "contain" }}
+                        onError={() => handleImageError(client.id)}
                       />
                     </div>
                   ) : (

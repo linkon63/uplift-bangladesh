@@ -102,7 +102,7 @@ export default function HeroSection() {
               from: "start",
             },
             onComplete: () => {
-              // Enable visible overflow so hover lift is never clipped
+              // Let the click wave extend beyond the character masks after the reveal.
               split?.masks?.forEach((m) => {
                 (m as HTMLElement).style.overflow = "visible";
               });
@@ -141,16 +141,12 @@ export default function HeroSection() {
           );
         }
 
-        // 4. Interactive tactile hover physics on each character
+        // 4. Subtle brand-color feedback without shifting the heading on hover.
         split.chars.forEach((char) => {
           const el = char as HTMLElement;
-          el.style.display = "inline-block";
-          el.style.position = "relative";
 
           const onMouseEnter = () => {
             gsap.to(el, {
-              yPercent: -15,
-              scale: 1.05,
               color: "#EE3028", // Uplift Bangladesh brand red
               duration: 0.22,
               ease: "power2.out",
@@ -160,11 +156,9 @@ export default function HeroSection() {
 
           const onMouseLeave = () => {
             gsap.to(el, {
-              yPercent: 0,
-              scale: 1,
               color: "#0f1011",
               duration: 0.5,
-              ease: "elastic.out(1.2, 0.4)",
+              ease: "power2.out",
               overwrite: "auto",
             });
           };

@@ -6,14 +6,12 @@ export const CLIENT_PORTFOLIO: ClientItem[] = [
     code: "NESTLE",
     name: "Nestlé",
     desc: "Global Nutrition, Health & Wellness",
-    image: "/assets/img/brands/brand-2.png",
   },
   {
     id: "02",
     code: "VIVO",
     name: "vivo",
     desc: "Smart Mobile & Consumer Technology",
-    image: "/assets/img/brands/brand-3.png",
   },
   {
     id: "03",
@@ -27,7 +25,6 @@ export const CLIENT_PORTFOLIO: ClientItem[] = [
     code: "MCDONALD",
     name: "McDonald Steel",
     desc: "Heavy Industrial Steel & Mega-Rebar",
-    image: "/assets/img/brands/brand-4.png",
   },
   {
     id: "05",
@@ -41,14 +38,12 @@ export const CLIENT_PORTFOLIO: ClientItem[] = [
     code: "DOCTIME",
     name: "DocTime",
     desc: "Digital Telehealth & Healthcare Platform",
-    image: "/assets/img/brands/main-brand-logo-1.png",
   },
   {
     id: "07",
     code: "NABIL_AGRO",
     name: "Nabil Agro Industries",
     desc: "Major Agribusiness & Grain Processing",
-    image: "/assets/img/brands/brand-10.png",
   },
   {
     id: "08",
@@ -83,14 +78,12 @@ export const CLIENT_PORTFOLIO: ClientItem[] = [
     code: "SUN_VALLEY",
     name: "Sun Valley Abashon",
     desc: "Township & Sustainable Housing Development",
-    image: "/assets/img/brands/brand-8.png",
   },
   {
     id: "13",
     code: "SONALI",
     name: "Sonali Group",
     desc: "Agro, Dairy & Fast-Moving Consumer Goods",
-    image: "/assets/img/brands/brand-7.png",
   },
   {
     id: "14",
@@ -104,14 +97,12 @@ export const CLIENT_PORTFOLIO: ClientItem[] = [
     code: "DESH_SHAMACHAR",
     name: "Desh Shamachar Studio",
     desc: "High-End Podcast & Digital Media Production",
-    image: "/assets/img/brands/brand-13.png",
   },
   {
     id: "16",
     code: "OBS_GLOBAL",
     name: "Online Bangla Academy",
     desc: "Mother Language Literacy Program",
-    image: "/assets/img/brands/brand-9.png",
   },
 ];
 

@@ -4911,6 +4911,8 @@ img, video {
 #mobile-menu.menu.is-open {
     display: flex !important;
     flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     position: fixed !important;
     inset: 0 !important;
     width: 100% !important;
@@ -4921,9 +4923,12 @@ img, video {
     backdrop-filter: blur(10px) !important;
     -webkit-backdrop-filter: blur(10px) !important;
     padding: 12px !important;
+    padding-top: max(12px, env(safe-area-inset-top)) !important;
+    padding-right: max(12px, env(safe-area-inset-right)) !important;
+    padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
+    padding-left: max(12px, env(safe-area-inset-left)) !important;
     box-sizing: border-box !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
+    overflow: hidden !important;
 }
 
 .menu_bg {
@@ -4945,11 +4950,16 @@ img, video {
     border-radius: 20px !important;
     max-width: 540px !important;
     width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
     box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22) !important;
     position: relative !important;
-    overflow: visible !important;
-    margin: 8px auto 24px auto !important;
-    min-height: min-content !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin: 0 auto !important;
+    min-height: 0 !important;
     padding: 20px 20px 24px 20px !important;
     box-sizing: border-box !important;
     animation: menuSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -4972,6 +4982,11 @@ img, video {
     align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+    flex-shrink: 0 !important;
+    background: #ffffff !important;
     padding-bottom: 14px !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
     margin-bottom: 10px !important;
@@ -5032,6 +5047,7 @@ img, video {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
+    gap: 12px !important;
     width: 100% !important;
     padding: 14px 4px !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
@@ -5045,10 +5061,20 @@ img, video {
     font-size: clamp(1.15rem, 3.8vw, 1.45rem) !important;
     font-weight: 600 !important;
     color: #0f1011 !important;
-    line-height: 1.3 !important;
+    line-height: 1.25 !important;
     margin: 0 !important;
-    white-space: nowrap !important;
+    min-width: 0 !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
     transition: color 0.15s ease !important;
+}
+
+#mobile-menu .menu_menu-link .menu_link-text {
+    flex: 1 1 auto !important;
+}
+
+#mobile-menu .menu_menu-link > svg {
+    flex: 0 0 auto !important;
 }
 
 #mobile-menu .menu_menu-link:hover .menu_link-text,
@@ -5107,7 +5133,7 @@ img, video {
     border-left: 2px solid #EE3028 !important;
     margin: 4px 0 8px 6px !important;
     position: static !important;
-    width: 100% !important;
+    width: calc(100% - 6px) !important;
 }
 
 #mobile-menu .dropdown-menu.w--open .dropdown-list,
@@ -5165,6 +5191,31 @@ img, video {
 
 #mobile-menu .menu_legal-link:hover {
     color: #EE3028 !important;
+}
+
+@media screen and (max-width: 480px) {
+    #mobile-menu.menu.is-open .menu_content {
+        padding: 16px 16px 20px 16px !important;
+        border-radius: 16px !important;
+    }
+
+    #mobile-menu .menu_drawer-header {
+        padding-bottom: 12px !important;
+        margin-bottom: 8px !important;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    #mobile-menu .menu_menu-link .menu_link-text,
+    #mobile-menu .navbar_link-text.is--dd {
+        font-size: 1.05rem !important;
+    }
+
+    #mobile-menu .menu_menu-link,
+    #mobile-menu .dropdown-menu .dd-toggle {
+        padding-left: 2px !important;
+        padding-right: 2px !important;
+    }
 }
 
 /* Mobile Hamburger Button Styling */
