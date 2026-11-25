@@ -94,35 +94,11 @@ export default function CosmosInteractions() {
       handleWorksScroll();
     }
 
-    // ── 2. NAVBAR AUTO-HIDE ON SCROLL DOWN, REVEAL ON SCROLL UP
-    let lastScrollY = window.scrollY;
-    let ticking = false;
+    // ── 2. NAVBAR SCROLL BEHAVIOR (Handled smoothly via Navbar is-scrolled state)
     const navbarContent = document.querySelector(".navbar_content") as HTMLElement | null;
-
     if (navbarContent) {
-      navbarContent.style.transition = "transform 0.45s cubic-bezier(0.215, 0.61, 0.355, 1)";
+      navbarContent.style.transform = "";
     }
-
-    const handleNavScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (navbarContent) {
-            if (currentScrollY > 120 && currentScrollY > lastScrollY) {
-              // Scrolling down
-              navbarContent.style.transform = "translateY(-120%)";
-            } else {
-              // Scrolling up or at top
-              navbarContent.style.transform = "translateY(0%)";
-            }
-          }
-          lastScrollY = Math.max(0, currentScrollY);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener("scroll", handleNavScroll, { passive: true });
 
     // ── 3. KINETIC TEXT & SECTION STAGGER REVEAL (Cosmos Reveal Engine)
     const revealTargets = Array.from(
@@ -283,7 +259,7 @@ export default function CosmosInteractions() {
       }
     }
 
-    // ── 7. LOTTIE ANIMATIONS LOADER
+    // ── 7. LOTTIE ANIMATIONS LOADER (Strict-Mode safe: prevents duplicate SVGs)
     const loadLotties = () => {
       const lottieElements = document.querySelectorAll('[data-animation-type="lottie"]');
       if (!lottieElements.length) return;
@@ -300,10 +276,14 @@ export default function CosmosInteractions() {
 
       const runPlayer = (bodymovin: LottieInstance) => {
         lottieElements.forEach((el) => {
-          if (el.querySelector("svg")) return;
+          if (el.getAttribute("data-lottie-init") === "1" || el.querySelector("svg")) {
+            return;
+          }
           const src = el.getAttribute("data-src");
-          if (!src) return;
+          if (!src || src.endsWith(".lottie")) return;
 
+          el.setAttribute("data-lottie-init", "1");
+          el.innerHTML = "";
           bodymovin.loadAnimation({
             container: el,
             renderer: el.getAttribute("data-renderer") || "svg",
@@ -319,7 +299,26 @@ export default function CosmosInteractions() {
         const instance = win.bodymovin || win.lottie;
         if (instance) runPlayer(instance);
       } else {
+        const existingScript = document.querySelector<HTMLScriptElement>(
+          'script[data-lottie-cdn="1"]'
+        );
+        if (existingScript) {
+          existingScript.addEventListener(
+            "load",
+            () => {
+              const loadedWin = window as unknown as {
+                bodymovin?: LottieInstance;
+                lottie?: LottieInstance;
+              };
+              const bm = loadedWin.bodymovin || loadedWin.lottie;
+              if (bm) runPlayer(bm);
+            },
+            { once: true }
+          );
+          return;
+        }
         const script = document.createElement("script");
+        script.setAttribute("data-lottie-cdn", "1");
         script.src = "https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js";
         script.async = true;
         script.onload = () => {
@@ -336,7 +335,6 @@ export default function CosmosInteractions() {
       window.removeEventListener("scroll", onWorksScroll);
       window.removeEventListener("resize", onWorksScroll);
       if (worksRafId !== null) cancelAnimationFrame(worksRafId);
-      window.removeEventListener("scroll", handleNavScroll);
       if (chatObserver) chatObserver.disconnect();
       revealObserver.disconnect();
       cleanupTiltList.forEach((fn) => fn());

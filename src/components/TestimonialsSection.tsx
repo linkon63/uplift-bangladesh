@@ -96,7 +96,7 @@ export default function TestimonialsSection() {
                 <div className="number_block flex flex-col gap-2">
                   <div className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-none text-[#0f1011] whitespace-nowrap">
                     <AnimatedCounter
-                      target={451000}
+                      target={452000}
                       duration={2200}
                       suffix="+"
                       trigger={isIntersecting}
@@ -110,7 +110,7 @@ export default function TestimonialsSection() {
                 <div className="number_block flex flex-col gap-2">
                   <div className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-none text-[#0f1011] whitespace-nowrap">
                     <AnimatedCounter
-                      target={681000}
+                      target={706000}
                       duration={2400}
                       suffix="+"
                       trigger={isIntersecting}
@@ -124,7 +124,7 @@ export default function TestimonialsSection() {
                 <div className="number_block flex flex-col gap-2">
                   <div className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-none text-[#0f1011] whitespace-nowrap">
                     <AnimatedCounter
-                      target={30}
+                      target={65}
                       duration={1600}
                       suffix="+"
                       trigger={isIntersecting}

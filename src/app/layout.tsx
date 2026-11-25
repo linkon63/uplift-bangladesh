@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import NavigationScrollHandler from "@/components/common/NavigationScrollHandler";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -83,6 +84,7 @@ export default function RootLayout({
       data-wf-site="69f9c76884333229e651e7bc"
     >
       <body>
+        <NavigationScrollHandler />
         {children}
       </body>
     </html>
