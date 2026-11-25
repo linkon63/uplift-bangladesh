@@ -12,7 +12,7 @@ export const SPONSORSHIP_PACKAGES: SponsorshipPackage[] = [
     features: [
       "In-depth cinematic feature & site walkthrough",
       "Contextual brand integration & executive interview",
-      "Permanent archival on YouTube (451K+ subscribers)",
+      "Permanent archival on YouTube (452K+ subscribers)",
       "4K UHD mastering with professional color grade",
     ],
   },
@@ -26,7 +26,7 @@ export const SPONSORSHIP_PACKAGES: SponsorshipPackage[] = [
     highlight: false,
     features: [
       "Fast-paced, mobile-optimized vertical video",
-      "Direct access to 681,000+ active Facebook followers",
+      "Direct access to 706,000+ active Facebook followers",
       "High viral potential and organic shareability",
       "Brand tag, call-to-action & product highlight",
     ],
@@ -70,7 +70,7 @@ export const SPONSORSHIP_BENEFITS: KeyBenefit[] = [
   },
   {
     title: "Highly Relevant Demographics",
-    desc: "Direct access to over 1,000,000+ followers actively tracking real estate, economy, engineering, and national markets.",
+    desc: "Direct access to over 1,150,000+ followers actively tracking real estate, economy, engineering, and national markets.",
   },
   {
     title: "High-Trust Platform Association",

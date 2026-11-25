@@ -6,7 +6,6 @@ import ServicesSection from "@/components/ServicesSection";
 import AboutSection from "@/components/AboutSection";
 import WhyChooseUsSection from "@/components/WhyChooseUsSection";
 import NoteMarquee from "@/components/NoteMarquee";
-import SponsorshipSection from "@/components/SponsorshipSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CtaSection from "@/components/CtaSection";
 import Footer from "@/components/Footer";
@@ -24,7 +23,6 @@ export default function Home() {
         <AboutSection />
         <WhyChooseUsSection />
         <NoteMarquee />
-        <SponsorshipSection />
         <TestimonialsSection />
         <CtaSection />
       </main>

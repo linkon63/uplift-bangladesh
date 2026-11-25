@@ -1,23 +1,112 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { SERVICES_DATA, FOCUS_AREAS_DATA } from "@/data";
+import { ServicesTabType } from "@/types";
 
 const ROLES = [
   "Documentary Filmmaker",
   "Development Content Creator",
   "Mega-Projects Influencer",
   "UPLIFT BANGLADESH",
+] as const;
+
+type DropdownKey = "services" | "focus";
+
+interface DropdownConfig {
+  key: DropdownKey;
+  label: string;
+  tab: ServicesTabType;
+  items: Array<{ id: number; number: string; title: string }>;
+}
+
+const DROPDOWNS: DropdownConfig[] = [
+  {
+    key: "services",
+    label: "Services",
+    tab: "Tab 1",
+    items: SERVICES_DATA,
+  },
+  {
+    key: "focus",
+    label: "Focus Areas",
+    tab: "Tab 2",
+    items: FOCUS_AREAS_DATA,
+  },
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [mobileFocusOpen, setMobileFocusOpen] = useState(false);
-  const [desktopServicesOpen, setDesktopServicesOpen] = useState(false);
-  const [desktopFocusOpen, setDesktopFocusOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<DropdownKey | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
   const [prevRoleIndex, setPrevRoleIndex] = useState<number | null>(null);
+
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const handleDropdownEnter = useCallback(
+    (key: DropdownKey) => {
+      clearCloseTimer();
+      setOpenDropdown(key);
+    },
+    [clearCloseTimer]
+  );
+
+  const handleDropdownLeave = useCallback(() => {
+    clearCloseTimer();
+    closeTimerRef.current = setTimeout(() => {
+      setOpenDropdown(null);
+    }, 160);
+  }, [clearCloseTimer]);
+
+  useEffect(() => {
+    return () => clearCloseTimer();
+  }, [clearCloseTimer]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    let rafId: number | null = null;
+    const updateScrollState = () => {
+      rafId = null;
+      const scrolled = window.scrollY > 24;
+      setIsScrolled((prev) => (prev !== scrolled ? scrolled : prev));
+    };
+    const onScroll = () => {
+      if (rafId === null) {
+        rafId = window.requestAnimationFrame(updateScrollState);
+      }
+    };
+    updateScrollState();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -37,6 +126,7 @@ export default function Navbar() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMobileMenuOpen(false);
+        setOpenDropdown(null);
       }
     };
 
@@ -56,30 +146,46 @@ export default function Navbar() {
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     href: string,
-    tab?: "Tab 1" | "Tab 2"
+    tab?: ServicesTabType
   ) => {
     e.preventDefault();
+    clearCloseTimer();
+    setOpenDropdown(null);
     closeMobileMenu();
+
     if (tab && typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("selectServicesTab", { detail: tab })
-      );
+      window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: tab }));
     }
-    if (typeof window !== "undefined") {
-      if (href.startsWith("#")) {
+
+    if (href === "#top") {
+      if (pathname === "/" && typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+      router.push("/", { scroll: false });
+      return;
+    }
+
+    if (href.startsWith("#")) {
+      if (pathname === "/" && typeof document !== "undefined") {
         const el = document.querySelector(href);
         if (el) {
           setTimeout(() => {
             el.scrollIntoView({ behavior: "smooth", block: "start" });
-          }, 120);
-          return;
-        } else {
-          window.location.href = `/${href}`;
+          }, 90);
           return;
         }
       }
-      window.location.href = href;
+      router.push(`/${href}`, { scroll: false });
+      if (tab && typeof window !== "undefined") {
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: tab }));
+        }, 350);
+      }
+      return;
     }
+
+    router.push(href, { scroll: false });
   };
 
   return (
@@ -89,9 +195,10 @@ export default function Navbar() {
       </a>
 
       <nav
+        ref={navRef}
         aria-label="Main"
         data-wf--navbar--menu-state={mobileMenuOpen ? "menu-open" : "menu-closed-default"}
-        className="navbar"
+        className={`navbar ${isScrolled ? "is-scrolled" : ""}`}
       >
         <div className="navbar_content">
           <div animation="navbar-content" className="padding-global is-tiny">
@@ -99,16 +206,17 @@ export default function Navbar() {
               <Link
                 aria-label="Uplift Bangladesh — home"
                 href="/"
-                aria-current="page"
+                onClick={(e) => handleNavClick(e, "#top")}
+                aria-current={pathname === "/" ? "page" : undefined}
                 className="navbar-logo_wr flex items-center gap-2.5 sm:gap-3 group shrink-0 no-underline"
               >
-                {/* Brand Logo - Crisp & Always Visible on ALL devices */}
+                {/* Brand Logo */}
                 <div className="navbar_logo-img-box flex items-center shrink-0">
                   <img
                     src="/assets/img/logo/logo.png"
                     loading="eager"
                     alt="Uplift Bangladesh"
-                    className="menu_logo object-contain h-8 sm:h-9 w-auto max-h-[34px] sm:max-h-[38px] transition-transform duration-200 group-hover:scale-105"
+                    className="object-contain h-8 w-8 sm:h-9 sm:w-9 transition-transform duration-200 group-hover:scale-105"
                   />
                 </div>
 
@@ -118,10 +226,10 @@ export default function Navbar() {
                   aria-hidden="true"
                 />
 
-                {/* Animated Tagline / Roles — visible on tablet & desktop without cutoff */}
+                {/* Animated Tagline / Roles — fixed min-width prevents center nav jitter */}
                 <div className="navbar_logo-wrap hidden md:flex items-center shrink-0 pr-1">
                   <div className="logo-text-flex flex items-center">
-                    <div className="navbar_logo-anim relative overflow-hidden h-[1.35em] grid grid-cols-1 w-auto max-w-none">
+                    <div className="navbar_logo-anim relative overflow-hidden h-[1.35em] grid grid-cols-1 min-w-[205px] xl:min-w-[220px]">
                       {ROLES.map((role, idx) => {
                         const isActive = idx === roleIndex;
                         const isPrev = idx === prevRoleIndex;
@@ -149,217 +257,89 @@ export default function Navbar() {
               {/* Desktop Navigation Links */}
               <div className="navbar_links">
                 <div className="navbar_links-wrap">
-                  <div
-                    className={`w-dropdown ${desktopServicesOpen ? "w--open" : ""}`}
-                    onMouseEnter={() => setDesktopServicesOpen(true)}
-                    onMouseLeave={() => setDesktopServicesOpen(false)}
-                  >
-                    <div
-                      className="dd-toggle w-dropdown-toggle cursor-pointer"
-                      onClick={() => setDesktopServicesOpen(!desktopServicesOpen)}
-                      role="button"
-                      aria-haspopup="menu"
-                      aria-expanded={desktopServicesOpen}
-                    >
-                      <div className="navbar_menu-link">
-                        <div className="navbar_link-texts">
-                          <div className="navbar_link-text _1">Services</div>
-                          <div aria-hidden="true" className="navbar_link-text _2">
-                            Services
-                          </div>
-                        </div>
-                      </div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="100%"
-                        viewBox="0 0 12 7"
-                        fill="none"
-                        className={`dd-icon transition-transform duration-200 ${
-                          desktopServicesOpen ? "rotate-180" : "rotate-0"
-                        }`}
+                  {DROPDOWNS.map((dd) => {
+                    const isOpen = openDropdown === dd.key;
+                    return (
+                      <div
+                        key={dd.key}
+                        className={`w-dropdown ${isOpen ? "w--open" : ""}`}
+                        onMouseEnter={() => handleDropdownEnter(dd.key)}
+                        onMouseLeave={handleDropdownLeave}
                       >
-                        <path
-                          d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </div>
-                    <nav
-                      className={`dropdown-list w-dropdown-list transition-all duration-200 ${
-                        desktopServicesOpen
-                          ? "w--open block opacity-100 pointer-events-auto -translate-x-1/2 translate-y-0"
-                          : ""
-                      }`}
-                    >
-                      <div className="w-dyn-list">
-                        <div role="list" className="w-dyn-items">
-                          <div role="listitem" className="w-dyn-item">
-                            <a
-                              href="#services"
-                              onClick={() => {
-                                setDesktopServicesOpen(false);
-                                window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: "Tab 1" }));
-                              }}
-                              className="dropdown-link"
-                            >
-                              Drone Cinematography
-                            </a>
+                        <button
+                          type="button"
+                          className="dd-toggle w-dropdown-toggle cursor-pointer bg-transparent border-0"
+                          onClick={() =>
+                            setOpenDropdown((curr) => (curr === dd.key ? null : dd.key))
+                          }
+                          aria-haspopup="menu"
+                          aria-expanded={isOpen}
+                        >
+                          <div className="navbar_menu-link">
+                            <div className="navbar_link-texts">
+                              <div className="navbar_link-text _1">{dd.label}</div>
+                              <div aria-hidden="true" className="navbar_link-text _2">
+                                {dd.label}
+                              </div>
+                            </div>
                           </div>
-                          <div role="listitem" className="w-dyn-item">
-                            <a
-                              href="#services"
-                              onClick={() => {
-                                setDesktopServicesOpen(false);
-                                window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: "Tab 1" }));
-                              }}
-                              className="dropdown-link"
-                            >
-                              Corporate Brand Films (OVC)
-                            </a>
-                          </div>
-                          <div role="listitem" className="w-dyn-item">
-                            <a
-                              href="#services"
-                              onClick={() => {
-                                setDesktopServicesOpen(false);
-                                window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: "Tab 1" }));
-                              }}
-                              className="dropdown-link"
-                            >
-                              Factory &amp; Industrial Videos
-                            </a>
-                          </div>
-                          <div role="listitem" className="w-dyn-item">
-                            <a
-                              href="#services"
-                              onClick={() => {
-                                setDesktopServicesOpen(false);
-                                window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: "Tab 1" }));
-                              }}
-                              className="dropdown-link"
-                            >
-                              Hotel &amp; Resort Films
-                            </a>
-                          </div>
-                          <div role="listitem" className="w-dyn-item">
-                            <a
-                              href="#services"
-                              onClick={() => {
-                                setDesktopServicesOpen(false);
-                                window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: "Tab 1" }));
-                              }}
-                              className="dropdown-link"
-                            >
-                              Real Estate Productions
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </nav>
-                  </div>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="100%"
+                            viewBox="0 0 12 7"
+                            fill="none"
+                            aria-hidden="true"
+                            className={`dd-icon transition-transform duration-200 ${
+                              isOpen ? "rotate-180" : "rotate-0"
+                            }`}
+                          >
+                            <path
+                              d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </button>
 
-                  <div
-                    className={`w-dropdown ${desktopFocusOpen ? "w--open" : ""}`}
-                    onMouseEnter={() => setDesktopFocusOpen(true)}
-                    onMouseLeave={() => setDesktopFocusOpen(false)}
+                        <nav
+                          aria-label={`${dd.label} submenu`}
+                          onMouseEnter={() => handleDropdownEnter(dd.key)}
+                          onMouseLeave={handleDropdownLeave}
+                          className={`dropdown-list w-dropdown-list ${
+                            isOpen ? "w--open" : ""
+                          }`}
+                        >
+                          <div className="w-dyn-list">
+                            <div role="list" className="w-dyn-items">
+                              {dd.items.map((item) => (
+                                <div key={item.id} role="listitem" className="w-dyn-item">
+                                  <a
+                                    href="#services"
+                                    onClick={(e) =>
+                                      handleNavClick(e, "#services", dd.tab)
+                                    }
+                                    className="dropdown-link group/item flex items-center justify-between gap-3"
+                                  >
+                                    <span className="truncate">{item.title}</span>
+                                    <span className="font-mono text-[10px] text-zinc-400 group-hover/item:text-[#EE3028] shrink-0">
+                                      {item.number.padStart(2, "0")}
+                                    </span>
+                                  </a>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </nav>
+                      </div>
+                    );
+                  })}
+
+                  <a
+                    href="#works"
+                    onClick={(e) => handleNavClick(e, "#works")}
+                    className="navbar_menu-link w-inline-block"
                   >
-                    <div
-                      className="dd-toggle w-dropdown-toggle cursor-pointer"
-                      onClick={() => setDesktopFocusOpen(!desktopFocusOpen)}
-                      role="button"
-                      aria-haspopup="menu"
-                      aria-expanded={desktopFocusOpen}
-                    >
-                      <div className="navbar_menu-link">
-                        <div className="navbar_link-texts">
-                          <div className="navbar_link-text _1">Focus Areas</div>
-                          <div aria-hidden="true" className="navbar_link-text _2">
-                            Focus Areas
-                          </div>
-                        </div>
-                      </div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="100%"
-                        viewBox="0 0 12 7"
-                        fill="none"
-                        className={`dd-icon transition-transform duration-200 ${
-                          desktopFocusOpen ? "rotate-180" : "rotate-0"
-                        }`}
-                      >
-                        <path
-                          d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </div>
-                    <nav
-                      className={`dropdown-list w-dropdown-list transition-all duration-200 ${
-                        desktopFocusOpen
-                          ? "w--open block opacity-100 pointer-events-auto -translate-x-1/2 translate-y-0"
-                          : ""
-                      }`}
-                    >
-                      <div className="w-dyn-list">
-                        <div role="list" className="w-dyn-items">
-                          <div role="listitem" className="w-dyn-item">
-                            <a
-                              href="#services"
-                              onClick={() => {
-                                setDesktopFocusOpen(false);
-                                window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: "Tab 2" }));
-                              }}
-                              className="dropdown-link"
-                            >
-                              Mega Infrastructure
-                            </a>
-                          </div>
-                          <div role="listitem" className="w-dyn-item">
-                            <a
-                              href="#services"
-                              onClick={() => {
-                                setDesktopFocusOpen(false);
-                                window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: "Tab 2" }));
-                              }}
-                              className="dropdown-link"
-                            >
-                              Smart Cities &amp; Urban
-                            </a>
-                          </div>
-                          <div role="listitem" className="w-dyn-item">
-                            <a
-                              href="#services"
-                              onClick={() => {
-                                setDesktopFocusOpen(false);
-                                window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: "Tab 2" }));
-                              }}
-                              className="dropdown-link"
-                            >
-                              Industrial &amp; Economic Zones
-                            </a>
-                          </div>
-                          <div role="listitem" className="w-dyn-item">
-                            <a
-                              href="#services"
-                              onClick={() => {
-                                setDesktopFocusOpen(false);
-                                window.dispatchEvent(new CustomEvent("selectServicesTab", { detail: "Tab 2" }));
-                              }}
-                              className="dropdown-link"
-                            >
-                              Green Energy &amp; Sustainability
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </nav>
-                  </div>
-
-                  <a href="#works" className="navbar_menu-link w-inline-block">
                     <div className="navbar_link-texts">
                       <div className="navbar_link-text _1">Mega-Projects</div>
                       <div aria-hidden="true" className="navbar_link-text _2">
@@ -369,7 +349,16 @@ export default function Navbar() {
                     <div className="nav_link-dot"></div>
                   </a>
 
-                  <a href="#sponsorship" className="navbar_menu-link w-inline-block">
+                  <Link
+                    href="/sponsorship"
+                    scroll={false}
+                    onClick={() => {
+                      clearCloseTimer();
+                      setOpenDropdown(null);
+                      closeMobileMenu();
+                    }}
+                    className="navbar_menu-link w-inline-block"
+                  >
                     <div className="navbar_link-texts">
                       <div className="navbar_link-text _1">Sponsorship</div>
                       <div aria-hidden="true" className="navbar_link-text _2">
@@ -377,31 +366,55 @@ export default function Navbar() {
                       </div>
                     </div>
                     <div className="nav_link-dot"></div>
-                  </a>
+                  </Link>
                 </div>
               </div>
 
               {/* Right Action Controls */}
               <div className="navbar_contact">
-                {/* Desktop Phone Card (>= 1280px for spacious layout without cramping) */}
-                <div className="navbar-contact hidden xl:block">
-                  <div data-wf--talk-to--variant="base">
-                    <a href="tel:01608427446" className="navbar_talk-to w-inline-block">
-                      <img
-                        loading="lazy"
-                        src="/assets/img/logo/logo.png"
-                        alt="Uplift Bangladesh"
-                        className="navbar_contact-pic object-contain"
-                      />
-                      <div className="navbar_contact-texts">
-                        <div className="relative">
-                          <div className="nav_contact-name">Uplift Bangladesh</div>
-                          <div className="online"></div>
-                        </div>
-                        <div className="home-header_position">01608-427446</div>
+                {/* Desktop Direct Line (>= 1280px) — synced with site typography & button geometry */}
+                <div className="navbar-contact hidden xl:flex items-center">
+                  <a
+                    href="tel:01608427446"
+                    className="group inline-flex items-center gap-2.5 pr-4 border-r border-black/10 no-underline"
+                    aria-label="Call Uplift Bangladesh Direct Line at 01608-427446"
+                  >
+                    <div
+                      className="relative w-9 h-9 rounded-[10px] bg-[#f4f4f6] border border-black/[0.08] flex items-center justify-center text-[#0f1011] shrink-0 transition-all duration-300 group-hover:border-[#EE3028]/35 group-hover:bg-[#EE3028]/[0.06] group-hover:text-[#EE3028]"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                      </svg>
+                      <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#EE3028] ring-2 ring-white" />
+                    </div>
+
+                    <div className="flex flex-col leading-none">
+                      <span className="text-[11px] font-medium text-zinc-500 tracking-[0.01em] leading-tight">
+                        Direct Line
+                      </span>
+                      <div className="relative overflow-hidden h-[1.3em] mt-0.5 text-[13px] font-semibold tracking-[-0.01em] leading-[1.3]">
+                        <span className="block text-[#0f1011] transition-transform duration-[320ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-full">
+                          01608-427446
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className="block text-[#EE3028] transition-transform duration-[320ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-full"
+                        >
+                          Book a Shoot
+                        </span>
                       </div>
-                    </a>
-                  </div>
+                    </div>
+                  </a>
                 </div>
 
                 {/* Partner CTA button (visible on tablet and desktop >= 640px) */}
@@ -409,6 +422,7 @@ export default function Navbar() {
                   <a
                     data-wf--button--variant="small-light"
                     href="#contact"
+                    onClick={(e) => handleNavClick(e, "#contact")}
                     className="button w-inline-block"
                   >
                     <div className="button-in">
@@ -530,15 +544,15 @@ export default function Navbar() {
             <div className="menu_drawer-header">
               <Link
                 href="/"
-                aria-current="page"
-                onClick={closeMobileMenu}
+                aria-current={pathname === "/" ? "page" : undefined}
+                onClick={(e) => handleNavClick(e, "#top")}
                 className="menu_logo-wrap flex items-center gap-2"
               >
                 <img
                   loading="lazy"
                   src="/assets/img/logo/logo.png"
                   alt="Uplift Bangladesh"
-                  className="menu_logo object-contain max-h-[32px] w-auto"
+                  className="object-contain h-8 w-8"
                 />
                 <span className="text-[11px] font-bold tracking-widest uppercase text-zinc-400">
                   MENU
@@ -573,160 +587,71 @@ export default function Navbar() {
               <div className="menu_links">
                 <div className="menu_col-1">
                   <div className="menu_links-wrap">
-                    {/* Services Accordion */}
-                    <div
-                      className={`dropdown-menu ${
-                        mobileServicesOpen ? "is-open w--open" : ""
-                      }`}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                        className="dd-toggle cursor-pointer"
-                        aria-expanded={mobileServicesOpen}
-                        aria-label="Toggle Services submenu"
-                      >
-                        <span className="navbar_link-text is--dd">
-                          Services
-                          <span className="text-[11px] font-semibold text-zinc-400 ml-1.5 font-mono">
-                            (05)
-                          </span>
-                        </span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 12 7"
-                          fill="none"
-                          className={`dd-icon transition-transform duration-200 ${
-                            mobileServicesOpen ? "rotate-180 text-[#EE3028]" : "rotate-0 text-zinc-400"
-                          }`}
-                        >
-                          <path
-                            d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </button>
+                    {/* Mobile Services & Focus Areas Accordions synced with data */}
+                    {DROPDOWNS.map((dd) => {
+                      const isMobileOpen =
+                        dd.key === "services" ? mobileServicesOpen : mobileFocusOpen;
+                      const toggle = () =>
+                        dd.key === "services"
+                          ? setMobileServicesOpen((v) => !v)
+                          : setMobileFocusOpen((v) => !v);
 
-                      <div
-                        className={`dropdown-list ${
-                          mobileServicesOpen ? "is-open w--open" : ""
-                        }`}
-                      >
-                        <a
-                          href="#services"
-                          onClick={(e) => handleNavClick(e, "#services", "Tab 1")}
-                          className="dropdown-link"
+                      return (
+                        <div
+                          key={dd.key}
+                          className={`dropdown-menu ${isMobileOpen ? "is-open w--open" : ""}`}
                         >
-                          Drone Cinematography
-                        </a>
-                        <a
-                          href="#services"
-                          onClick={(e) => handleNavClick(e, "#services", "Tab 1")}
-                          className="dropdown-link"
-                        >
-                          Corporate Brand Films (OVC)
-                        </a>
-                        <a
-                          href="#services"
-                          onClick={(e) => handleNavClick(e, "#services", "Tab 1")}
-                          className="dropdown-link"
-                        >
-                          Factory &amp; Industrial Videos
-                        </a>
-                        <a
-                          href="#services"
-                          onClick={(e) => handleNavClick(e, "#services", "Tab 1")}
-                          className="dropdown-link"
-                        >
-                          Hotel &amp; Resort Films
-                        </a>
-                        <a
-                          href="#services"
-                          onClick={(e) => handleNavClick(e, "#services", "Tab 1")}
-                          className="dropdown-link"
-                        >
-                          Real Estate Productions
-                        </a>
-                      </div>
-                    </div>
+                          <button
+                            type="button"
+                            onClick={toggle}
+                            className="dd-toggle cursor-pointer"
+                            aria-expanded={isMobileOpen}
+                            aria-label={`Toggle ${dd.label} submenu`}
+                          >
+                            <span className="navbar_link-text is--dd">
+                              {dd.label}
+                              <span className="text-[11px] font-semibold text-zinc-400 ml-1.5 font-mono">
+                                ({String(dd.items.length).padStart(2, "0")})
+                              </span>
+                            </span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="14"
+                              height="14"
+                              viewBox="0 0 12 7"
+                              fill="none"
+                              className={`dd-icon transition-transform duration-200 ${
+                                isMobileOpen
+                                  ? "rotate-180 text-[#EE3028]"
+                                  : "rotate-0 text-zinc-400"
+                              }`}
+                            >
+                              <path
+                                d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                          </button>
 
-                    {/* Focus Areas Accordion */}
-                    <div
-                      className={`dropdown-menu ${
-                        mobileFocusOpen ? "is-open w--open" : ""
-                      }`}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setMobileFocusOpen(!mobileFocusOpen)}
-                        className="dd-toggle cursor-pointer"
-                        aria-expanded={mobileFocusOpen}
-                        aria-label="Toggle Focus Areas submenu"
-                      >
-                        <span className="navbar_link-text is--dd">
-                          Focus Areas
-                          <span className="text-[11px] font-semibold text-zinc-400 ml-1.5 font-mono">
-                            (04)
-                          </span>
-                        </span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 12 7"
-                          fill="none"
-                          className={`dd-icon transition-transform duration-200 ${
-                            mobileFocusOpen ? "rotate-180 text-[#EE3028]" : "rotate-0 text-zinc-400"
-                          }`}
-                        >
-                          <path
-                            d="M1 1L5.29289 5.29289C5.68342 5.68342 6.31658 5.68342 6.70711 5.29289L11 1"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </button>
-
-                      <div
-                        className={`dropdown-list ${
-                          mobileFocusOpen ? "is-open w--open" : ""
-                        }`}
-                      >
-                        <a
-                          href="#services"
-                          onClick={(e) => handleNavClick(e, "#services", "Tab 2")}
-                          className="dropdown-link"
-                        >
-                          Mega Infrastructure
-                        </a>
-                        <a
-                          href="#services"
-                          onClick={(e) => handleNavClick(e, "#services", "Tab 2")}
-                          className="dropdown-link"
-                        >
-                          Smart Cities &amp; Urban
-                        </a>
-                        <a
-                          href="#services"
-                          onClick={(e) => handleNavClick(e, "#services", "Tab 2")}
-                          className="dropdown-link"
-                        >
-                          Industrial &amp; Economic Zones
-                        </a>
-                        <a
-                          href="#services"
-                          onClick={(e) => handleNavClick(e, "#services", "Tab 2")}
-                          className="dropdown-link"
-                        >
-                          Green Energy &amp; Sustainability
-                        </a>
-                      </div>
-                    </div>
+                          <div
+                            className={`dropdown-list ${isMobileOpen ? "is-open w--open" : ""}`}
+                          >
+                            {dd.items.map((item) => (
+                              <a
+                                key={item.id}
+                                href="#services"
+                                onClick={(e) => handleNavClick(e, "#services", dd.tab)}
+                                className="dropdown-link"
+                              >
+                                {item.title}
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
 
                     {/* Mega-Projects Link */}
                     <a
@@ -741,16 +666,21 @@ export default function Navbar() {
                     </a>
 
                     {/* Sponsorship Link */}
-                    <a
-                      href="#sponsorship"
-                      onClick={(e) => handleNavClick(e, "#sponsorship")}
+                    <Link
+                      href="/sponsorship"
+                      scroll={false}
+                      onClick={() => {
+                        clearCloseTimer();
+                        setOpenDropdown(null);
+                        closeMobileMenu();
+                      }}
                       className="menu_menu-link w-inline-block"
                     >
                       <span className="menu_link-text">Sponsorship Packages</span>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-400">
                         <polyline points="9 18 15 12 9 6"></polyline>
                       </svg>
-                    </a>
+                    </Link>
 
                     {/* Audience Link */}
                     <a
@@ -801,28 +731,33 @@ export default function Navbar() {
                     </a>
                   </div>
 
-                  {/* Direct Action & Contact Section */}
+                  {/* Direct Action & Story Desk Section */}
                   <div className="mobile-drawer_contact-card mt-4 pt-4 border-t border-black/8 flex flex-col gap-3">
                     <a
                       href="tel:01608427446"
-                      className="flex items-center justify-between p-3.5 bg-zinc-50 border border-black/6 rounded-xl hover:bg-zinc-100 transition-colors no-underline text-inherit"
+                      className="flex items-center justify-between p-3.5 bg-[#0f1011] border border-black/15 rounded-xl hover:border-[#EE3028]/50 transition-colors no-underline text-white"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-[#EE3028]/10 flex items-center justify-center text-[#EE3028]">
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <div className="relative w-9 h-9 rounded-full bg-[#EE3028]/15 border border-[#EE3028]/40 flex items-center justify-center text-[#EE3028]">
+                          <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EE3028] opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#EE3028]"></span>
+                          </span>
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                           </svg>
                         </div>
                         <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-zinc-900">Direct Hotline</span>
-                            <span className="inline-block w-2 h-2 rounded-full bg-[#00D26A] animate-pulse"></span>
+                          <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-400">
+                            <span className="text-[#EE3028] font-bold">ON AIR</span>
+                            <span className="text-zinc-600">•</span>
+                            <span>STORY DESK</span>
                           </div>
-                          <span className="text-sm font-bold text-zinc-700 font-mono">01608-427446</span>
+                          <span className="text-sm font-bold text-white font-mono">01608-427446</span>
                         </div>
                       </div>
-                      <span className="text-xs font-semibold text-[#EE3028] bg-[#EE3028]/10 px-2.5 py-1 rounded-full">
-                        Call Now
+                      <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-white bg-[#EE3028] px-2.5 py-1 rounded-full">
+                        Pitch Now
                       </span>
                     </a>
 
@@ -857,15 +792,31 @@ export default function Navbar() {
                         rel="noopener noreferrer"
                         className="px-2.5 py-1 bg-zinc-100 rounded-md text-[11px] font-semibold text-zinc-700 hover:text-[#EE3028] transition-colors"
                       >
-                        YouTube (451K+)
+                        YouTube (452K+)
                       </a>
                       <a
-                        href="https://www.facebook.com/upliftbangladesh"
+                        href="https://www.facebook.com/UpliftBangladeshOfficiall"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="px-2.5 py-1 bg-zinc-100 rounded-md text-[11px] font-semibold text-zinc-700 hover:text-[#EE3028] transition-colors"
                       >
-                        Facebook (681K+)
+                        Facebook (706K+)
+                      </a>
+                      <a
+                        href="https://www.instagram.com/upliftbangladeshofficial"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2.5 py-1 bg-zinc-100 rounded-md text-[11px] font-semibold text-zinc-700 hover:text-[#EE3028] transition-colors"
+                      >
+                        Instagram
+                      </a>
+                      <a
+                        href="https://www.tiktok.com/@upliftbangladesh.real"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2.5 py-1 bg-zinc-100 rounded-md text-[11px] font-semibold text-zinc-700 hover:text-[#EE3028] transition-colors"
+                      >
+                        TikTok
                       </a>
                       <a
                         href="mailto:upliftbd.media@gmail.com"
