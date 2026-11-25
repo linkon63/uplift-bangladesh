@@ -12779,25 +12779,24 @@ video {
 
 #mobile-menu.menu.is-open {
     display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: flex-end !important;
     position: fixed !important;
     inset: 0 !important;
-    width: 100% !important;
+    width: 100vw !important;
     height: 100vh !important;
     height: 100dvh !important;
-    z-index: 9999 !important;
-    background: rgba(0, 0, 0, 0.45) !important;
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    padding: 12px !important;
-    padding-top: max(12px, env(safe-area-inset-top)) !important;
-    padding-right: max(12px, env(safe-area-inset-right)) !important;
-    padding-bottom: max(12px, env(safe-area-inset-bottom)) !important;
-    padding-left: max(12px, env(safe-area-inset-left)) !important;
+    z-index: 99999 !important;
+    background: rgba(0, 0, 0, 0.55) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    padding: 0 !important;
+    margin: 0 !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
+    pointer-events: auto !important;
+    transition: background 0.3s ease !important;
 }
 
 .menu_bg {
@@ -12810,39 +12809,63 @@ video {
     inset: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
+    height: 100dvh !important;
     background: transparent !important;
-    z-index: 9998 !important;
+    z-index: 99998 !important;
+    pointer-events: auto !important;
+}
+
+#mobile-menu,
+#mobile-menu * {
+    pointer-events: auto;
 }
 
 #mobile-menu.menu.is-open .menu_content {
     background-color: #ffffff !important;
-    border-radius: 20px !important;
-    max-width: 540px !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-height: 100% !important;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22) !important;
+    border-radius: 24px 0 0 24px !important;
+    width: min(88vw, 420px) !important;
+    max-width: 420px !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    box-shadow: -12px 0 60px rgba(0, 0, 0, 0.28) !important;
     position: relative !important;
     overflow-x: hidden !important;
     overflow-y: auto !important;
     overscroll-behavior: contain !important;
     -webkit-overflow-scrolling: touch !important;
-    margin: 0 auto !important;
-    min-height: 0 !important;
-    padding: 20px 20px 24px 20px !important;
+    touch-action: pan-y !important;
+    pointer-events: auto !important;
+    margin: 0 !important;
+    padding: 18px 20px 28px 20px !important;
+    padding-top: max(18px, env(safe-area-inset-top)) !important;
+    padding-bottom: max(28px, env(safe-area-inset-bottom)) !important;
     box-sizing: border-box !important;
-    animation: menuSlideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    animation: drawerSlideInRight 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-@keyframes menuSlideDown {
+#mobile-menu.menu.is-open .menu_content::-webkit-scrollbar {
+    width: 5px !important;
+}
+
+#mobile-menu.menu.is-open .menu_content::-webkit-scrollbar-track {
+    background: transparent !important;
+}
+
+#mobile-menu.menu.is-open .menu_content::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.18) !important;
+    border-radius: 999px !important;
+}
+
+@keyframes drawerSlideInRight {
     from {
-        opacity: 0;
-        transform: translateY(-16px) scale(0.98);
+        transform: translateX(100%);
+        opacity: 0.7;
     }
 
     to {
+        transform: translateX(0%);
         opacity: 1;
-        transform: translateY(0) scale(1);
     }
 }
 
@@ -12854,18 +12877,20 @@ video {
     width: 100% !important;
     position: sticky !important;
     top: 0 !important;
-    z-index: 2 !important;
+    z-index: 10 !important;
     flex-shrink: 0 !important;
     background: #ffffff !important;
     padding-bottom: 14px !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
     margin-bottom: 10px !important;
+    pointer-events: auto !important;
 }
 
 .menu_logo-wrap {
     display: inline-flex !important;
     align-items: center !important;
     text-decoration: none !important;
+    pointer-events: auto !important;
 }
 
 /* Close button on mobile menu */
@@ -12883,6 +12908,8 @@ video {
     color: #0f1011 !important;
     flex-shrink: 0 !important;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
 }
 
 .menu_close:hover,
@@ -12893,15 +12920,25 @@ video {
 }
 
 /* Mobile Menu Links Layout & Typography */
+#mobile-menu .menu_items {
+    width: 100% !important;
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    pointer-events: auto !important;
+}
+
 #mobile-menu .menu_links {
     width: 100% !important;
     padding: 0 !important;
     display: flex !important;
     flex-direction: column !important;
+    pointer-events: auto !important;
 }
 
 #mobile-menu .menu_col-1 {
     width: 100% !important;
+    pointer-events: auto !important;
 }
 
 #mobile-menu .menu_links-wrap {
@@ -12910,6 +12947,7 @@ video {
     gap: 4px !important;
     margin-top: 6px !important;
     width: 100% !important;
+    pointer-events: auto !important;
 }
 
 #mobile-menu .menu_menu-link,
@@ -12924,6 +12962,8 @@ video {
     text-decoration: none !important;
     cursor: pointer !important;
     transition: color 0.15s ease !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
 }
 
 #mobile-menu .menu_menu-link .menu_link-text,
@@ -12960,6 +13000,7 @@ video {
 #mobile-menu .dropdown-menu {
     width: 100% !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    pointer-events: auto !important;
 }
 
 #mobile-menu .dropdown-menu .dd-toggle {
@@ -12972,10 +13013,17 @@ video {
     border: none !important;
     background: transparent !important;
     text-align: left !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+}
+
+#mobile-menu .dropdown-menu .dd-toggle * {
+    pointer-events: none !important;
 }
 
 #mobile-menu .dropdown-menu .dd-toggle:hover .navbar_link-text.is--dd,
-#mobile-menu .dropdown-menu.is-open .navbar_link-text.is--dd {
+#mobile-menu .dropdown-menu.is-open .navbar_link-text.is--dd,
+#mobile-menu .dropdown-menu.w--open .navbar_link-text.is--dd {
     color: #EE3028 !important;
 }
 
@@ -12984,6 +13032,7 @@ video {
     height: 16px !important;
     transition: transform 0.25s ease, color 0.25s ease !important;
     flex-shrink: 0 !important;
+    pointer-events: none !important;
 }
 
 #mobile-menu .dropdown-menu.w--open .dd-icon,
@@ -13004,11 +13053,17 @@ video {
     margin: 4px 0 8px 6px !important;
     position: static !important;
     width: calc(100% - 6px) !important;
+    pointer-events: auto !important;
 }
 
 #mobile-menu .dropdown-menu.w--open .dropdown-list,
-#mobile-menu .dropdown-menu.is-open .dropdown-list {
+#mobile-menu .dropdown-menu.is-open .dropdown-list,
+#mobile-menu .dropdown-list.is-open,
+#mobile-menu .dropdown-list.w--open {
     display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
 }
 
 #mobile-menu .dropdown-menu .dropdown-link {
@@ -13020,6 +13075,9 @@ video {
     text-decoration: none !important;
     border-radius: 8px !important;
     transition: all 0.18s ease !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
 }
 
 #mobile-menu .dropdown-menu .dropdown-link:hover,
@@ -13066,7 +13124,10 @@ video {
 @media screen and (max-width: 480px) {
     #mobile-menu.menu.is-open .menu_content {
         padding: 16px 16px 20px 16px !important;
-        border-radius: 16px !important;
+        padding-top: max(16px, env(safe-area-inset-top)) !important;
+        padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
+        border-radius: 20px 0 0 20px !important;
+        width: min(90vw, 380px) !important;
     }
 
     #mobile-menu .menu_drawer-header {

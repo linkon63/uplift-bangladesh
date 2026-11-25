@@ -51,6 +51,7 @@ export default function Navbar() {
 
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
+  const menuContentRef = useRef<HTMLDivElement | null>(null);
 
   const clearCloseTimer = useCallback(() => {
     if (closeTimerRef.current) {
@@ -123,6 +124,17 @@ export default function Navbar() {
       document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
     }
 
+    if (mobileMenuOpen) {
+      if (menuContentRef.current) {
+        menuContentRef.current.scrollTop = 0;
+      }
+      requestAnimationFrame(() => {
+        if (menuContentRef.current) {
+          menuContentRef.current.scrollTop = 0;
+        }
+      });
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setMobileMenuOpen(false);
@@ -141,6 +153,11 @@ export default function Navbar() {
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
+    setMobileServicesOpen(false);
+    setMobileFocusOpen(false);
+    if (menuContentRef.current) {
+      menuContentRef.current.scrollTop = 0;
+    }
   };
 
   const handleNavClick = (
@@ -539,7 +556,11 @@ export default function Navbar() {
             }
           }}
         >
-          <div className="menu_content" onClick={(e) => e.stopPropagation()}>
+          <div
+            ref={menuContentRef}
+            className="menu_content"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Drawer Header */}
             <div className="menu_drawer-header">
               <Link
@@ -591,10 +612,15 @@ export default function Navbar() {
                     {DROPDOWNS.map((dd) => {
                       const isMobileOpen =
                         dd.key === "services" ? mobileServicesOpen : mobileFocusOpen;
-                      const toggle = () =>
-                        dd.key === "services"
-                          ? setMobileServicesOpen((v) => !v)
-                          : setMobileFocusOpen((v) => !v);
+                      const toggle = (e: React.MouseEvent) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (dd.key === "services") {
+                          setMobileServicesOpen((v) => !v);
+                        } else {
+                          setMobileFocusOpen((v) => !v);
+                        }
+                      };
 
                       return (
                         <div
@@ -604,11 +630,11 @@ export default function Navbar() {
                           <button
                             type="button"
                             onClick={toggle}
-                            className="dd-toggle cursor-pointer"
+                            className="dd-toggle cursor-pointer w-full text-left"
                             aria-expanded={isMobileOpen}
                             aria-label={`Toggle ${dd.label} submenu`}
                           >
-                            <span className="navbar_link-text is--dd">
+                            <span className="navbar_link-text is--dd pointer-events-none">
                               {dd.label}
                               <span className="text-[11px] font-semibold text-zinc-400 ml-1.5 font-mono">
                                 ({String(dd.items.length).padStart(2, "0")})
@@ -620,7 +646,7 @@ export default function Navbar() {
                               height="14"
                               viewBox="0 0 12 7"
                               fill="none"
-                              className={`dd-icon transition-transform duration-200 ${
+                              className={`dd-icon pointer-events-none transition-transform duration-200 ${
                                 isMobileOpen
                                   ? "rotate-180 text-[#EE3028]"
                                   : "rotate-0 text-zinc-400"
@@ -731,33 +757,42 @@ export default function Navbar() {
                     </a>
                   </div>
 
-                  {/* Direct Action & Story Desk Section */}
+                  {/* Direct Action & Partner CTA Section */}
                   <div className="mobile-drawer_contact-card mt-4 pt-4 border-t border-black/8 flex flex-col gap-3">
                     <a
                       href="tel:01608427446"
-                      className="flex items-center justify-between p-3.5 bg-[#0f1011] border border-black/15 rounded-xl hover:border-[#EE3028]/50 transition-colors no-underline text-white"
+                      className="flex items-center justify-between p-3.5 bg-[#f8f8fa] hover:bg-zinc-100 border border-black/[0.08] hover:border-[#EE3028]/35 rounded-2xl transition-all no-underline text-[#0f1011] group"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="relative w-9 h-9 rounded-full bg-[#EE3028]/15 border border-[#EE3028]/40 flex items-center justify-center text-[#EE3028]">
+                        <div className="relative w-9 h-9 rounded-xl bg-white border border-black/[0.08] flex items-center justify-center text-[#0f1011] group-hover:text-[#EE3028] transition-colors shadow-sm">
                           <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#EE3028] opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#EE3028]"></span>
                           </span>
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <svg
+                            width="15"
+                            height="15"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                           </svg>
                         </div>
-                        <div>
-                          <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-zinc-400">
-                            <span className="text-[#EE3028] font-bold">ON AIR</span>
-                            <span className="text-zinc-600">•</span>
-                            <span>STORY DESK</span>
-                          </div>
-                          <span className="text-sm font-bold text-white font-mono">01608-427446</span>
+                        <div className="flex flex-col leading-none">
+                          <span className="text-[11px] font-medium text-zinc-500 tracking-[0.01em]">
+                            Direct Line
+                          </span>
+                          <span className="text-sm font-bold text-[#0f1011] font-mono mt-0.5 group-hover:text-[#EE3028] transition-colors">
+                            01608-427446
+                          </span>
                         </div>
                       </div>
-                      <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-white bg-[#EE3028] px-2.5 py-1 rounded-full">
-                        Pitch Now
+                      <span className="text-[11px] font-medium tracking-wide text-white bg-[#EE3028] px-3 py-1.5 rounded-full shadow-sm">
+                        Book a Shoot
                       </span>
                     </a>
 
@@ -767,13 +802,13 @@ export default function Navbar() {
                       onClick={(e) => handleNavClick(e, "#contact")}
                       className="button w-inline-block w-full"
                     >
-                      <div className="button-in justify-center py-3 bg-[#0f1011] text-white rounded-xl">
-                        <div className="button_texts">
-                          <div className="button_text _1 font-semibold text-sm">
-                            Partner With Us • Get In Touch
+                      <div className="button-in justify-center py-3.5 bg-[#0f1011] hover:bg-[#EE3028] text-white rounded-full transition-colors duration-200">
+                        <div className="button_texts text-center">
+                          <div className="button_text _1 font-medium text-[0.94rem]">
+                            Partner With Us
                           </div>
-                          <div aria-hidden="true" className="button_text _2 font-semibold text-sm">
-                            Partner With Us • Get In Touch
+                          <div aria-hidden="true" className="button_text _2 font-medium text-[0.94rem]">
+                            Get In Touch
                           </div>
                         </div>
                       </div>
