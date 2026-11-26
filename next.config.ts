@@ -8,6 +8,22 @@ const nextConfig: NextConfig = {
     "127.0.0.1:3000",
   ],
   devIndicators: false,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "upliftbangladesh.bd",
+      },
+      {
+        protocol: "https",
+        hostname: "**.upliftbangladesh.bd",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.prod.website-files.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
